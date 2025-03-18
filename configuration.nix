@@ -5,12 +5,21 @@
 { config, lib, pkgs, ... }: 
 
 {
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    grub = {
+      enable = true;
+      devices = [ "nodev" ];
+      efiSupport = true;
+      useOSProber = true;
+    };
+
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
+  };
 
   networking.hostName = "joebox";
   # Pick only one of the below networking options.
@@ -64,8 +73,8 @@
   users.users.jovannmc = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-    ];
+    #packages = with pkgs; [
+    #];
   };
 
   programs.firefox.enable = true;
@@ -75,13 +84,22 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+
+    # editors
     micro
-    wget
-    tree
     vscode
-    vesktop
-    brave
+
+    # command line utilities
+    wget
     git
+    tree
+
+    # chat
+    vesktop
+
+    # other
+    librewolf
+    brave
   ];
 
   programs.git = {
