@@ -80,15 +80,25 @@
 
   programs.firefox.enable = true;
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [ "olm-3.2.16" ];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    # programming
+    python3Full
+    nodejs_22
+    bun
 
     # editors
     micro
     vscode
+    audacity
+    blender
+    libreoffice
 
     # command line utilities
     wget
@@ -97,45 +107,72 @@
     nixfmt
     btop
     hyfetch
+    android-tools
+    scrcpy
+    uxplay
 
     # chat
     vesktop
+    #nheko
+    kdePackages.neochat
+    telegram-desktop
+    thunderbird
 
     # games
-    steam
     prismlauncher
+    wlx-overlay-s
+    opencomposite
+    proton-ge-rtsp-bin
+
+    # networking
+    qbittorrent
+    tailscale
+    wireshark
 
     # other
     librewolf
     brave
     gparted
     kdePackages.partitionmanager
+    obs-studio
+    vlc
+    filezilla
+    vmware-workstation
   ];
 
-  programs.git = {
-    enable = true;
-    config = {
-      user.name = "JovannMC";
-      user.email = "jovannmc@femboyfurry.net";
-      commit.gpgsign = true;
-      tag.gpgsign = true;
-      gpg.format = "ssh";
-      user.signingkey = "/home/jovannmc/.ssh/id_rsa.pub";
+  programs = {
+    git = {
+      enable = true;
+      config = {
+        user.name = "JovannMC";
+        user.email = "jovannmc@femboyfurry.net";
+        commit.gpgsign = true;
+        tag.gpgsign = true;
+        gpg.format = "ssh";
+        user.signingkey = "/home/jovannmc/.ssh/id_rsa.pub";
+      };
+    };
+
+    steam = { enable = true; };
+
+    # Some programs need SUID wrappers, can be configured further or are
+    # started in user sessions.
+    # programs.mtr.enable = true;
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
     };
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
   # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services = {
+    openssh.enable = true;
+    wivrn = {
+      enable = true;
+      defaultRuntime = true;
+      openFirewall = true;
+    };
+  };
 
   environment = {
     sessionVariables.NIXOS_OZONE_WL =
