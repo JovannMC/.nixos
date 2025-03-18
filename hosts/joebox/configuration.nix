@@ -30,4 +30,34 @@
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.production;
   };
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/5b9cc694-c600-48ae-87ff-558182b7bcc5";
+    fsType = "btrfs";
+    options = [ "subvol=@" ];
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/E044-AFE6";
+    fsType = "vfat";
+    options = [ "fmask=0077" "dmask=0077" ];
+  };
+
+  fileSystems."/mnt/windows" = {
+    device = "/dev/disk/by-uuid/5E70E5FD70E5DC31";
+    fsType = "ntfs";
+  };
+
+  fileSystems."/mnt/storage" = {
+    device = "/dev/disk/by-uuid/C408CF7F08CF6F4C";
+    fsType = "ntfs";
+  };
+
+  fileSystems."/mnt/editing" = {
+    device = "/dev/disk/by-uuid/C6FE0F60FE0F47DF";
+    fsType = "ntfs";
+  };
+
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/f11168ac-adc5-44d8-b13c-5860e01f703b"; }];
 }

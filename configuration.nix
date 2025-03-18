@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }: 
+{ config, lib, pkgs, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -24,7 +24,8 @@
   networking.hostName = "joebox";
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable =
+    true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Asia/Qatar";
@@ -93,13 +94,20 @@
     wget
     git
     tree
+    nixfmt
 
     # chat
     vesktop
 
+    # games
+    steam
+    prismlauncher
+
     # other
     librewolf
     brave
+    gparted
+    kdePackages.partitionmanager
   ];
 
   programs.git = {
@@ -128,7 +136,8 @@
   services.openssh.enable = true;
 
   environment = {
-    sessionVariables.NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
+    sessionVariables.NIXOS_OZONE_WL =
+      "1"; # force electron apps to run on wayland
   };
 
   # Open ports in the firewall.
