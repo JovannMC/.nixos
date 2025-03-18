@@ -4,7 +4,6 @@
   imports = [ ../../configuration.nix ./hardware-configuration.nix ];
 
   hardware.nvidia = {
-
     # Modesetting is required.
     modesetting.enable = true;
 

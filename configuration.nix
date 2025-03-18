@@ -95,6 +95,8 @@
     git
     tree
     nixfmt
+    btop
+    hyfetch
 
     # chat
     vesktop
