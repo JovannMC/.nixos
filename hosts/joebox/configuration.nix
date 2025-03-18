@@ -3,6 +3,15 @@
 {
   imports = [ ../../configuration.nix ./hardware-configuration.nix ];
 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
+  services.xserver = {
+    videoDrivers = [ "nvidia" ];
+  };
+
   hardware.nvidia = {
     # Modesetting is required.
     modesetting.enable = true;
