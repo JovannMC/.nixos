@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -78,8 +78,6 @@
     #];
   };
 
-  programs.firefox.enable = true;
-
   nixpkgs.config = {
     allowUnfree = true;
     permittedInsecurePackages = [ "olm-3.2.16" ];
@@ -92,6 +90,9 @@
     python3Full
     nodejs_22
     bun
+    github-desktop
+    gnumake
+    gcc
 
     # editors
     micro
@@ -110,11 +111,12 @@
     android-tools
     scrcpy
     uxplay
+    flatpak
 
     # chat
     vesktop
-    #nheko
-    kdePackages.neochat
+    nheko
+    #kdePackages.neochat
     telegram-desktop
     thunderbird
 
@@ -127,6 +129,7 @@
     #proton-ge-rtsp-bin
     #also get rdp/vnc working
     #vr/vrc still needs testing
+    sidequest
 
     # networking
     qbittorrent
@@ -136,13 +139,19 @@
     # other
     librewolf
     brave
-    gparted
-    kdePackages.partitionmanager
     obs-studio
     vlc
     filezilla
-    vmware-workstation
     spotify
+
+    # utilities
+    kdePackages.partitionmanager
+    vmware-workstation
+    gparted
+    xmousepasteblock
+    # gwe # no support for wayland
+    tuxclocker
+
   ];
 
   programs = {
@@ -160,6 +169,23 @@
 
     steam = { enable = true; };
 
+    # spicetify =
+    #   let spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+    #   in {
+    #     enable = true;
+
+    #     enabledExtensions = with spicePkgs.extensions; [
+    #       adblock
+    #       hidePodcasts
+    #       shuffle # shuffle+ (special characters are sanitized out of extension names)
+    #     ];
+    #     enabledCustomApps = with spicePkgs.apps; [ newReleases ncsVisualizer ];
+    #     enabledSnippets = with spicePkgs.snippets; [ rotatingCoverart pointer ];
+
+    #     theme = spicePkgs.themes.catppuccin;
+    #     colorScheme = "mocha";
+    #   };
+
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.
     # programs.mtr.enable = true;
@@ -172,6 +198,7 @@
   # List services that you want to enable:
   services = {
     openssh.enable = true;
+    flatpak.enable = true;
     wivrn = {
       enable = true;
       defaultRuntime = true;
@@ -187,10 +214,9 @@
 
   environment = {
     sessionVariables = {
-      NIXOS_OZONE_WL =
-      "1"; # force electron apps to run on wayland
+      NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
       STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-      "\${HOME}/.steam/root/compatibilitytools.d";
+        "\${HOME}/.steam/root/compatibilitytools.d";
     };
   };
 
