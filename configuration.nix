@@ -122,7 +122,11 @@
     prismlauncher
     wlx-overlay-s
     opencomposite
-    proton-ge-rtsp-bin
+    protonup-ng
+    #proton-ge
+    #proton-ge-rtsp-bin
+    #also get rdp/vnc working
+    #vr/vrc still needs testing
 
     # networking
     qbittorrent
@@ -138,6 +142,7 @@
     vlc
     filezilla
     vmware-workstation
+    spotify
   ];
 
   programs = {
@@ -172,11 +177,21 @@
       defaultRuntime = true;
       openFirewall = true;
     };
+    sunshine = {
+      enable = true;
+      autoStart = true;
+      capSysAdmin = true;
+      openFirewall = true;
+    };
   };
 
   environment = {
-    sessionVariables.NIXOS_OZONE_WL =
+    sessionVariables = {
+      NIXOS_OZONE_WL =
       "1"; # force electron apps to run on wayland
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS =
+      "\${HOME}/.steam/root/compatibilitytools.d";
+    };
   };
 
   # Open ports in the firewall.
