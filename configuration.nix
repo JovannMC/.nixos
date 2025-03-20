@@ -211,34 +211,37 @@
       enable = true;
       defaultRuntime = true;
       openFirewall = true;
+      autoStart = true;
+      # thank you LVRA discord for helping me fix my weird issue lmfao
+      # "it could be that wivrn is writing an older path for oc and messing it up"
+      extraServerFlags = [ "--no-manage-active-runtime" ];
 
-      config = {
-        enable = true;
-        json = {
-          # 1.0x foveation scaling
-          scale = 1.0;
-          # 50 Mb/s
-          bitrate = 50000000;
-          encoders = [
-            {
-              encoder = "vaapi";
-              codec = "h265";
-              width = 0.5;
-              height = 1.0;
-              offset_x = 0.0;
-              offset_y = 0.0;
-            }
-            {
-              encoder = "vaapi";
-              codec = "h265";
-              width = 0.5;
-              height = 1.0;
-              offset_x = 0.5;
-              offset_y = 0.0;
-            }
-          ];
-        };
-      };
+      # config = {
+      #   enable = true;
+      #   json = {
+      #     scale = 0.5;
+      #     # 100 Mb/s
+      #     bitrate = 100000000;
+      #     encoders = [
+      #       {
+      #         encoder = "nvenc";
+      #         codec = "h265";
+      #         width = 0.5;
+      #         height = 1.0;
+      #         offset_x = 0.0;
+      #         offset_y = 0.0;
+      #       }
+      #       {
+      #         encoder = "nvenc";
+      #         codec = "h265";
+      #         width = 0.5;
+      #         height = 1.0;
+      #         offset_x = 0.5;
+      #         offset_y = 0.0;
+      #       }
+      #     ];
+      #   };
+      # };
     };
     sunshine = {
       enable = true;
