@@ -175,22 +175,37 @@
 
     steam = { enable = true; };
 
-    # spicetify =
-    #   let spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-    #   in {
-    #     enable = true;
+    spicetify =
+      let spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+      in {
+        enable = true;
 
-    #     enabledExtensions = with spicePkgs.extensions; [
-    #       adblock
-    #       hidePodcasts
-    #       shuffle # shuffle+ (special characters are sanitized out of extension names)
-    #     ];
-    #     enabledCustomApps = with spicePkgs.apps; [ newReleases ncsVisualizer ];
-    #     enabledSnippets = with spicePkgs.snippets; [ rotatingCoverart pointer ];
+        enabledExtensions = with spicePkgs.extensions; [
+          adblock
+          shuffle # shuffle+ (special characters are sanitized out of extension names)
+          fullAlbumDate
+          skipStats
+          songStats
+          showQueueDuration
+          history
+          volumePercentage
+          beautifulLyrics
+          oneko
+        ];
+        enabledCustomApps = with spicePkgs.apps; [
+          newReleases
+          ncsVisualizer
+          marketplace
+        ];
+        enabledSnippets = with spicePkgs.snippets; [
+          pointer
+          smoothProgressBar
+          oneko
+        ];
 
-    #     theme = spicePkgs.themes.catppuccin;
-    #     colorScheme = "mocha";
-    #   };
+        theme = spicePkgs.themes.catppuccin;
+        colorScheme = "mocha";
+      };
 
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.
