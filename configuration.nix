@@ -7,6 +7,8 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  imports = [ ./home.nix ];
+
   boot.loader = {
     grub = {
       enable = true;
@@ -125,6 +127,7 @@
     wlx-overlay-s
     opencomposite
     protonup-ng
+    bs-manager
     #proton-ge
     #proton-ge-rtsp-bin
     #also get rdp/vnc working
@@ -151,7 +154,8 @@
     xmousepasteblock
     # gwe # no support for wayland
     tuxclocker
-
+    kdePackages.krdc
+    nvidia-vaapi-driver
   ];
 
   programs = {
@@ -194,6 +198,8 @@
       enable = true;
       enableSSHSupport = true;
     };
+
+    kdeconnect.enable = true;
   };
 
   # List services that you want to enable:
@@ -204,6 +210,34 @@
       enable = true;
       defaultRuntime = true;
       openFirewall = true;
+
+      config = {
+        enable = true;
+        json = {
+          # 1.0x foveation scaling
+          scale = 1.0;
+          # 50 Mb/s
+          bitrate = 50000000;
+          encoders = [
+            {
+              encoder = "vaapi";
+              codec = "h265";
+              width = 0.5;
+              height = 1.0;
+              offset_x = 0.0;
+              offset_y = 0.0;
+            }
+            {
+              encoder = "vaapi";
+              codec = "h265";
+              width = 0.5;
+              height = 1.0;
+              offset_x = 0.5;
+              offset_y = 0.0;
+            }
+          ];
+        };
+      };
     };
     sunshine = {
       enable = true;
@@ -219,8 +253,11 @@
   };
 
   environment = {
+    variables = { GAY = "maya"; };
     sessionVariables = {
-      NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
+      # issue with gpu accel on wayland: https://github.com/electron/electron/issues/45862 & https://github.com/NixOS/nixpkgs/issues/382612
+      # thanks chromium (https://issues.chromium.org/issues/396434686)
+      #NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
       STEAM_EXTRA_COMPAT_TOOLS_PATHS =
         "\${HOME}/.steam/root/compatibilitytools.d";
     };
