@@ -157,6 +157,7 @@
   programs = {
     git = {
       enable = true;
+      lfs.enable = true;
       config = {
         user.name = "JovannMC";
         user.email = "jovannmc@femboyfurry.net";
@@ -209,6 +210,11 @@
       autoStart = true;
       capSysAdmin = true;
       openFirewall = true;
+    };
+    foldingathome = {
+      enable = true;
+      team = 1066441;
+      user = "JovannMC";
     };
   };
 
