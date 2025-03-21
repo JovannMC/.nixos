@@ -115,6 +115,8 @@
     tree
     nixfmt
     btop
+    hyfetch
+    pciutils # gpu support for hyfetch.. even though it is in hyfetch's nix expression
     android-tools
     scrcpy
     uxplay
@@ -244,7 +246,6 @@
     virt-manager.enable = true;
     java.enable = true;
     wireshark.enable = true;
-    hyfetch.enable = true;
   };
 
   # List services that you want to enable:
