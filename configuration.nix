@@ -99,6 +99,7 @@
     github-desktop
     gnumake
     gcc
+    rustup
 
     # editors
     micro
