@@ -67,6 +67,8 @@
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -92,7 +94,7 @@
   environment.systemPackages = with pkgs; [
     # programming
     python3Full
-    nodejs_22
+    nodejs
     bun
     github-desktop
     gnumake
@@ -104,6 +106,8 @@
     audacity
     blender
     libreoffice
+    alcom
+    unityhub
 
     # command line utilities
     wget
@@ -111,11 +115,9 @@
     tree
     nixfmt
     btop
-    hyfetch
     android-tools
     scrcpy
     uxplay
-    flatpak
 
     # chat
     vesktop
@@ -130,10 +132,8 @@
     opencomposite
     protonup-ng
     bs-manager
-    #proton-ge
     #proton-ge-rtsp-bin
     #also get rdp/vnc working
-    #vr/vrc still needs testing
     sidequest
 
     # networking
@@ -193,8 +193,6 @@
       };
     };
 
-    steam = { enable = true; };
-
     spicetify =
       let spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
       in {
@@ -235,7 +233,18 @@
       enableSSHSupport = true;
     };
 
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
+
+    steam.enable = true;
+    partition-manager.enable = true;
     kdeconnect.enable = true;
+    virt-manager.enable = true;
+    java.enable = true;
+    wireshark.enable = true;
+    hyfetch.enable = true;
   };
 
   # List services that you want to enable:
@@ -289,6 +298,7 @@
       team = 1066441;
       user = "JovannMC";
     };
+    tailscale.enable = true;
   };
 
   environment = {
