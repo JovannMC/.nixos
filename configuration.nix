@@ -76,6 +76,7 @@
   users.users.jovannmc = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    shell = pkgs.zsh;
     #packages = with pkgs; [
     #];
   };
@@ -160,6 +161,25 @@
   ];
 
   programs = {
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestions.enable = true;
+      syntaxHighlighting.enable = true;
+      histSize = 10000;
+
+      shellAliases = {
+        ll = "ls -l";
+        update = "sudo nixos-rebuild switch";
+      };
+
+      ohMyZsh = {
+        enable = true;
+        plugins = [ "git" "thefuck" "dirhistory" "history" "you-should-use" ];
+        theme = "robbyrussell";
+      };
+    };
+
     git = {
       enable = true;
       lfs.enable = true;
