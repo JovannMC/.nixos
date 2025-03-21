@@ -132,16 +132,12 @@
     prismlauncher
     wlx-overlay-s
     opencomposite
-    protonup-ng
     bs-manager
-    #proton-ge-rtsp-bin
     #also get rdp/vnc working
     sidequest
 
     # networking
     qbittorrent
-    tailscale
-    wireshark
 
     # other
     librewolf
@@ -240,7 +236,11 @@
       binfmt = true;
     };
 
-    steam.enable = true;
+    steam = {
+      enable = true;
+      extraCompatPackages = with pkgs; [ proton-ge-bin proton-ge-rtsp-bin ];
+    };
+
     partition-manager.enable = true;
     kdeconnect.enable = true;
     virt-manager.enable = true;
