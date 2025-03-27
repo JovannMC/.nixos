@@ -23,11 +23,14 @@
     };
   };
 
-  networking.hostName = "joebox";
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable =
-    true; # Easiest to use and most distros use this by default.
+  networking = {
+    hostName = "joebox";
+    # Pick only one of the below networking options.
+    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    networkmanager.enable =
+      true; # Easiest to use and most distros use this by default.
+    nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Qatar";
@@ -83,6 +86,13 @@
     #];
   };
 
+  users.groups.libvirtd.members = [ "jovannmc" ];
+
+  virtualisation = {
+    libvirtd.enable = true;
+    spiceUSBRedirection.enable = true;
+  };
+
   nixpkgs.config = {
     allowUnfree = true;
     permittedInsecurePackages = [ "olm-3.2.16" ];
@@ -99,6 +109,7 @@
     github-desktop
     gnumake
     gcc
+    undollar
 
     # editors
     micro
@@ -146,9 +157,10 @@
     vlc
     filezilla
     spotify
+    fahclient
+    (pkgs.callPackage ./davinci-resolve-paid.nix  {})
 
     # utilities
-    kdePackages.partitionmanager
     vmware-workstation
     gparted
     xmousepasteblock
@@ -156,6 +168,10 @@
     tuxclocker
     kdePackages.krdc
     nvidia-vaapi-driver
+    recoll
+    kdePackages.kalk
+    pinta
+    qdirstat
   ];
 
   programs = {
@@ -250,8 +266,6 @@
 
   # List services that you want to enable:
   services = {
-    openssh.enable = true;
-    flatpak.enable = true;
     wivrn = {
       enable = true;
       defaultRuntime = true;
@@ -299,7 +313,21 @@
       team = 1066441;
       user = "JovannMC";
     };
+    resolved = {
+      enable = true;
+      dnssec = "true";
+      domains = [ "~." ];
+      fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+      dnsovertls = "true";
+    };
+    mullvad-vpn = {
+      enable = true;
+      package = pkgs.mullvad-vpn;
+    };
+
     tailscale.enable = true;
+    openssh.enable = true;
+    flatpak.enable = true;
   };
 
   environment = {
