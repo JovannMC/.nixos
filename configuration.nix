@@ -47,35 +47,13 @@
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  services.desktopManager.plasma6.enable = true;
-  services.displayManager = {
-    sddm.enable = true;
-    sddm.wayland.enable = false;
-    defaultSession = "plasma";
+  hardware = {
+    bluetooth = {
+      enable = true; # enables support for Bluetooth
+      powerOnBoot = true; # powers up the default Bluetooth controller on boot
+      settings = { General = { Experimental = true; }; };
+    };
   };
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound.
-  # hardware.pulseaudio.enable = true;
-  # OR
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jovannmc = {
@@ -158,7 +136,7 @@
     filezilla
     spotify
     fahclient
-    (pkgs.callPackage ./davinci-resolve-paid.nix  {})
+    (pkgs.callPackage ./davinci-resolve-paid.nix { })
 
     # utilities
     vmware-workstation
@@ -266,6 +244,44 @@
 
   # List services that you want to enable:
   services = {
+    #
+    # hardware / system stuff
+    #
+
+    # Enable the X11 windowing system.
+    xserver.enable = true;
+
+    desktopManager.plasma6.enable = true;
+    displayManager = {
+      sddm.enable = true;
+      sddm.wayland.enable = false;
+      defaultSession = "plasma";
+    };
+
+    # Enable CUPS to print documents.
+    printing.enable = true;
+
+    # Enable sound.
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+    };
+
+    resolved = {
+      enable = true;
+      dnssec = "true";
+      domains = [ "~." ];
+      fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+      dnsovertls = "true";
+    };
+    openssh.enable = true;
+    blueman.enable = true;
+
+    #
+    # user stuff
+    #
     wivrn = {
       enable = true;
       defaultRuntime = true;
@@ -313,20 +329,12 @@
       team = 1066441;
       user = "JovannMC";
     };
-    resolved = {
-      enable = true;
-      dnssec = "true";
-      domains = [ "~." ];
-      fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
-      dnsovertls = "true";
-    };
     mullvad-vpn = {
       enable = true;
       package = pkgs.mullvad-vpn;
     };
 
     tailscale.enable = true;
-    openssh.enable = true;
     flatpak.enable = true;
   };
 
