@@ -110,6 +110,7 @@
     scrcpy
     uxplay
     zsh-you-should-use
+    (pkgs.ffmpeg-full.override { withUnfree = true; withOpengl = true; })
 
     # chat
     vesktop
@@ -261,7 +262,10 @@
     };
 
     # Enable CUPS to print documents.
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = [ pkgs.hplipWithPlugin ];
+    };
 
     # Enable sound.
     pipewire = {
