@@ -109,6 +109,7 @@
     android-tools
     scrcpy
     uxplay
+    zsh-you-should-use
 
     # chat
     vesktop
@@ -167,10 +168,11 @@
 
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" "thefuck" "dirhistory" "history" "you-should-use" ];
+        plugins = [ "git" "thefuck" "dirhistory" "history" ];
         theme = "robbyrussell";
       };
     };
+    thefuck.enable = true;
 
     git = {
       enable = true;
@@ -350,8 +352,8 @@
   };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 3389 ];
+  networking.firewall.allowedUDPPorts = [ 3389 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
