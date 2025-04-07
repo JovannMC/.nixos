@@ -58,7 +58,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jovannmc = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "vboxusers" "dialout" ];
     shell = pkgs.zsh;
     #packages = with pkgs; [
     #];
@@ -67,6 +67,10 @@
   users.groups.libvirtd.members = [ "jovannmc" ];
 
   virtualisation = {
+    virtualbox.host = {
+      enable = true;
+      enableExtensionPack = true;
+    };
     libvirtd.enable = true;
     spiceUSBRedirection.enable = true;
   };
@@ -88,6 +92,7 @@
     gnumake
     gcc
     undollar
+    rust-analyzer
 
     # editors
     micro
@@ -110,7 +115,7 @@
     scrcpy
     uxplay
     zsh-you-should-use
-    (pkgs.ffmpeg-full.override { withUnfree = true; withOpengl = true; })
+    (pkgs.ffmpeg-full.override { withOpengl = true; withRtmp = true; })
 
     # chat
     vesktop
@@ -141,7 +146,6 @@
     (pkgs.callPackage ./davinci-resolve-paid.nix { })
 
     # utilities
-    vmware-workstation
     gparted
     xmousepasteblock
     # gwe # no support for wayland
@@ -169,7 +173,7 @@
 
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" "thefuck" "dirhistory" "history" ];
+        plugins = [ "git" "thefuck" "dirhistory" "history" "direnv" ];
         theme = "robbyrussell";
       };
     };
@@ -240,9 +244,9 @@
 
     partition-manager.enable = true;
     kdeconnect.enable = true;
-    virt-manager.enable = true;
     java.enable = true;
     wireshark.enable = true;
+    direnv.enable = true;
   };
 
   # List services that you want to enable:
