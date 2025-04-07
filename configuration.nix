@@ -64,14 +64,11 @@
     #];
   };
 
-  users.groups.libvirtd.members = [ "jovannmc" ];
-
   virtualisation = {
     virtualbox.host = {
       enable = true;
       enableExtensionPack = true;
     };
-    libvirtd.enable = true;
     spiceUSBRedirection.enable = true;
   };
 
