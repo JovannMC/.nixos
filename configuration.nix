@@ -271,7 +271,7 @@
     desktopManager.plasma6.enable = true;
     displayManager = {
       sddm.enable = true;
-      sddm.wayland.enable = false;;
+      sddm.wayland.enable = false;
       autoLogin.enable = true;
       autoLogin.user = "jovannmc";
       defaultSession = "plasma";
