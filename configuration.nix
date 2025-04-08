@@ -7,28 +7,20 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  imports = [ 
-    ./home.nix 
-    # ./gpu-passthru.nix 
-  ];
+  imports = [ ./home.nix ];
 
-  boot = {
-    loader = {
-      grub = {
-        enable = true;
-        devices = [ "nodev" ];
-        efiSupport = true;
-        useOSProber = true;
-      };
-
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
+  boot.loader = {
+    grub = {
+      enable = true;
+      devices = [ "nodev" ];
+      efiSupport = true;
+      useOSProber = true;
     };
 
-    kernelPackages = pkgs.linuxPackages_zen;
-    kernelParams = [ "pcie_acs_override=downstream,multifunction" ];
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
   };
 
   networking = {
@@ -73,10 +65,6 @@
   };
 
   virtualisation = {
-    # virtualbox.host = {
-    #   enable = true;
-    #   enableExtensionPack = true;
-    # };
     libvirtd.enable = true;
     spiceUSBRedirection.enable = true;
   };
@@ -272,8 +260,6 @@
     displayManager = {
       sddm.enable = true;
       sddm.wayland.enable = false;
-      autoLogin.enable = true;
-      autoLogin.user = "jovannmc";
       defaultSession = "plasma";
     };
 
