@@ -7,20 +7,28 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  imports = [ ./home.nix ];
+  imports = [ 
+    ./home.nix 
+    # ./gpu-passthru.nix 
+  ];
 
-  boot.loader = {
-    grub = {
-      enable = true;
-      devices = [ "nodev" ];
-      efiSupport = true;
-      useOSProber = true;
+  boot = {
+    loader = {
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+        useOSProber = true;
+      };
+
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
     };
 
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot";
-    };
+    kernelPackages = pkgs.linuxPackages_zen;
+    kernelParams = [ "pcie_acs_override=downstream,multifunction" ];
   };
 
   networking = {
@@ -58,17 +66,18 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jovannmc = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "vboxusers" "dialout" ];
+    extraGroups = [ "wheel" "vboxusers" "dialout" "libvirtd" ];
     shell = pkgs.zsh;
     #packages = with pkgs; [
     #];
   };
 
   virtualisation = {
-    virtualbox.host = {
-      enable = true;
-      enableExtensionPack = true;
-    };
+    # virtualbox.host = {
+    #   enable = true;
+    #   enableExtensionPack = true;
+    # };
+    libvirtd.enable = true;
     spiceUSBRedirection.enable = true;
   };
 
@@ -112,7 +121,10 @@
     scrcpy
     uxplay
     zsh-you-should-use
-    (pkgs.ffmpeg-full.override { withOpengl = true; withRtmp = true; })
+    (pkgs.ffmpeg-full.override {
+      withOpengl = true;
+      withRtmp = true;
+    })
 
     # chat
     vesktop
@@ -244,6 +256,7 @@
     java.enable = true;
     wireshark.enable = true;
     direnv.enable = true;
+    virt-manager.enable = true;
   };
 
   # List services that you want to enable:
@@ -258,7 +271,9 @@
     desktopManager.plasma6.enable = true;
     displayManager = {
       sddm.enable = true;
-      sddm.wayland.enable = false;
+      sddm.wayland.enable = false;;
+      autoLogin.enable = true;
+      autoLogin.user = "jovannmc";
       defaultSession = "plasma";
     };
 
