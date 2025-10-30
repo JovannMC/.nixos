@@ -40,20 +40,15 @@
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/5b9cc694-c600-48ae-87ff-558182b7bcc5";
+    device = "/dev/disk/by-uuid/b1dc858d-6e15-4ae5-ac31-73d9cb9bcaae";
     fsType = "btrfs";
     options = [ "subvol=@" ];
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/E044-AFE6";
+    device = "/dev/disk/by-uuid/EC47-0639";
     fsType = "vfat";
     options = [ "fmask=0077" "dmask=0077" ];
-  };
-
-  fileSystems."/mnt/windows" = {
-    device = "/dev/disk/by-uuid/5E70E5FD70E5DC31";
-    fsType = "ntfs";
   };
 
   fileSystems."/mnt/storage" = {
@@ -67,5 +62,5 @@
   };
 
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/f11168ac-adc5-44d8-b13c-5860e01f703b"; }];
+    [{ device = "/dev/disk/by-uuid/6766bdd8-c44c-4512-980c-c43087f8a98a"; }];
 }

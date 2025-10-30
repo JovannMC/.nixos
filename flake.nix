@@ -12,11 +12,11 @@
 
   outputs = { self, nixpkgs, nixpkgs-xr, home-manager, spicetify-nix }@inputs: {
     nixosConfigurations = {
-      joebox = nixpkgs.lib.nixosSystem rec {
+      mayabox = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          ./hosts/joebox/configuration.nix
+          ./hosts/mayabox/configuration.nix
           nixpkgs-xr.nixosModules.nixpkgs-xr
           home-manager.nixosModules.home-manager
           spicetify-nix.nixosModules.default

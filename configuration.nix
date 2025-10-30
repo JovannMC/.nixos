@@ -24,7 +24,7 @@
   };
 
   networking = {
-    hostName = "joebox";
+    hostName = "mayabox";
     # Pick only one of the below networking options.
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
     networkmanager.enable =
@@ -103,6 +103,7 @@
     tree
     nixfmt
     btop
+    fastfetch
     hyfetch
     pciutils # gpu support for hyfetch.. even though it is in hyfetch's nix expression
     android-tools
@@ -120,13 +121,15 @@
     #kdePackages.neochat
     telegram-desktop
     thunderbird
+    signal-desktop
 
     # games
     prismlauncher
     wlx-overlay-s
     opencomposite
     bs-manager
-    #also get rdp/vnc working
+    kdePackages.krdc
+    kdePackages.krfb
     sidequest
 
     # networking
@@ -266,7 +269,9 @@
     # Enable CUPS to print documents.
     printing = {
       enable = true;
-      drivers = [ pkgs.hplipWithPlugin ];
+      drivers = [
+      #pkgs.hplipWithPlugin
+      ];
     };
 
     # Enable sound.
@@ -385,7 +390,7 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
 }
 
