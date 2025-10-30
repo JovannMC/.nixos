@@ -5,7 +5,7 @@
   home-manager.backupFileExtension = ".home-manager.bak";
   home-manager.users.jovannmc = {
     # The home.stateVersion option does not have a default and must be set
-    home.stateVersion = "24.11";
+    home.stateVersion = "25.05";
 
     xdg.desktopEntries = {
       wlx-overlay-s = {

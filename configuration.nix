@@ -9,19 +9,28 @@
 
   imports = [ ./home.nix ];
 
-  boot.loader = {
-    grub = {
-      enable = true;
-      devices = [ "nodev" ];
-      efiSupport = true;
-      useOSProber = true;
+  boot = {
+    loader = {
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+      };
+
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
     };
 
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot";
-    };
+    # for OBS virtual camera
+    extraModulePackages = with config.boot.kernelPackages;
+      [ v4l2loopback ];
+    extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
+    '';
   };
+  security.polkit.enable = true;
 
   networking = {
     hostName = "mayabox";
@@ -72,17 +81,15 @@
   nixpkgs.config = {
     allowUnfree = true;
     permittedInsecurePackages = [ "olm-3.2.16" ];
-    cudaSupport = true;
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # programming
-    python3Full
+    python3
     nodejs
     bun
-    github-desktop
     gnumake
     gcc
     undollar
@@ -96,6 +103,7 @@
     libreoffice
     alcom
     unityhub
+    sourcegit
 
     # command line utilities
     wget
@@ -138,12 +146,18 @@
     # other
     librewolf
     brave
-    obs-studio
     vlc
     filezilla
     spotify
     fahclient
     (pkgs.callPackage ./davinci-resolve-paid.nix { })
+    (pkgs.wrapOBS {
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        obs-backgroundremoval
+        obs-pipewire-audio-capture
+      ];
+    })
 
     # utilities
     gparted
@@ -159,6 +173,9 @@
   ];
 
   programs = {
+    ssh.startAgent = true;
+    pay-respects.enable = true;
+
     zsh = {
       enable = true;
       enableCompletion = true;
@@ -173,11 +190,10 @@
 
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" "thefuck" "dirhistory" "history" "direnv" ];
+        plugins = [ "git" "pay-respects" "dirhistory" "history" "direnv" ];
         theme = "robbyrussell";
       };
     };
-    thefuck.enable = true;
 
     git = {
       enable = true;
@@ -229,7 +245,7 @@
     # programs.mtr.enable = true;
     gnupg.agent = {
       enable = true;
-      enableSSHSupport = true;
+      enableSSHSupport = false;
     };
 
     appimage = {
@@ -270,7 +286,7 @@
     printing = {
       enable = true;
       drivers = [
-      #pkgs.hplipWithPlugin
+        #pkgs.hplipWithPlugin
       ];
     };
 
@@ -363,8 +379,8 @@
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 3389 ];
-  networking.firewall.allowedUDPPorts = [ 3389 ];
+  networking.firewall.allowedTCPPorts = [ 3389 5900 ];
+  networking.firewall.allowedUDPPorts = [ 3389 5900 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
