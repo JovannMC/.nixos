@@ -136,8 +136,6 @@
     wlx-overlay-s
     opencomposite
     bs-manager
-    kdePackages.krdc
-    kdePackages.krfb
     sidequest
 
     # networking
@@ -145,7 +143,7 @@
 
     # other
     librewolf
-    brave
+    brave # helium for nix when
     vlc
     filezilla
     spotify
@@ -153,28 +151,37 @@
     (pkgs.callPackage ./davinci-resolve-paid.nix { })
     (pkgs.wrapOBS {
       plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
+        wlrobs-unstable
         obs-backgroundremoval
         obs-pipewire-audio-capture
+        obs-dvd-screensaver
+        obs-freeze-filter
+        obs-multi-rtmp
+        obs-media-controls
+        obs-vkcapture
+        obs-vertical-canvas
+        waveform
       ];
     })
 
     # utilities
     gparted
-    xmousepasteblock
     # gwe # no support for wayland
     tuxclocker
-    kdePackages.krdc
     nvidia-vaapi-driver
     recoll
     kdePackages.kalk
     pinta
     qdirstat
+    kdePackages.krdc
+    kdePackages.krfb
   ];
 
   programs = {
     ssh.startAgent = true;
     pay-respects.enable = true;
+    nix-index.enable = true;
+    noisetorch.enable = true;
 
     zsh = {
       enable = true;
@@ -190,7 +197,7 @@
 
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" "pay-respects" "dirhistory" "history" "direnv" ];
+        plugins = [ "git" "dirhistory" "history" "direnv" ];
         theme = "robbyrussell";
       };
     };
