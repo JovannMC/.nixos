@@ -7,7 +7,7 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  imports = [ ./home.nix ];
+  imports = [ ./home.nix ./keyboard-knob-remap.nix ];
 
   boot = {
     loader = {
@@ -67,7 +67,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jovannmc = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "vboxusers" "dialout" "libvirtd" ];
+    extraGroups = [ "wheel" "vboxusers" "dialout" "libvirtd" "input" ];
     shell = pkgs.zsh;
     #packages = with pkgs; [
     #];
