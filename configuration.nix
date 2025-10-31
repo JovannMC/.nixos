@@ -122,6 +122,7 @@
       withOpengl = true;
       withRtmp = true;
     })
+    playerctl
 
     # chat
     vesktop
@@ -130,6 +131,7 @@
     telegram-desktop
     thunderbird
     signal-desktop
+    slack
 
     # games
     prismlauncher
@@ -151,7 +153,7 @@
     (pkgs.callPackage ./davinci-resolve-paid.nix { })
     (pkgs.wrapOBS {
       plugins = with pkgs.obs-studio-plugins; [
-        wlrobs-unstable
+        wlrobs
         obs-backgroundremoval
         obs-pipewire-audio-capture
         obs-dvd-screensaver
@@ -159,7 +161,6 @@
         obs-multi-rtmp
         obs-media-controls
         obs-vkcapture
-        obs-vertical-canvas
         waveform
       ];
     })
@@ -175,6 +176,7 @@
     qdirstat
     kdePackages.krdc
     kdePackages.krfb
+    remmina
   ];
 
   programs = {
@@ -379,7 +381,7 @@
     sessionVariables = {
       # issue with gpu accel on wayland: https://github.com/electron/electron/issues/45862 & https://github.com/NixOS/nixpkgs/issues/382612
       # thanks chromium (https://issues.chromium.org/issues/396434686)
-      #NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
+      NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
       STEAM_EXTRA_COMPAT_TOOLS_PATHS =
         "\${HOME}/.steam/root/compatibilitytools.d";
     };
