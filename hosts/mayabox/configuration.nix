@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ../../configuration.nix ./hardware-configuration.nix ];
+  imports = [
+    ../../configuration.nix
+    ./hardware-configuration.nix
+  ];
 
   hardware.graphics = {
     enable = true;
@@ -24,9 +27,9 @@
 
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+    # Support is limited to the Turing and later architectures. Full list of
+    # supported GPUs is at:
+    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
     # Only available from driver 515.43.04+
     # Currently alpha-quality/buggy, so false is currently the recommended setting.
     open = true;
@@ -48,7 +51,10 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/EC47-0639";
     fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   fileSystems."/mnt/storage" = {
@@ -61,6 +67,5 @@
     fsType = "ntfs";
   };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/6766bdd8-c44c-4512-980c-c43087f8a98a"; }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/6766bdd8-c44c-4512-980c-c43087f8a98a"; } ];
 }

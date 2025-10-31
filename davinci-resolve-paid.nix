@@ -6,19 +6,22 @@
   ...
 }:
 let
-  oldNixpkgs = import (builtins.fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/b0d522069803a9c9eb523bee7bdb95f74844b6a8.tar.gz";
-    sha256 = "02g0pd76wpjrj38d558j8svmps7xk8s8ddjkkyn9kswfmr7xn3c7";
-  }) {
-    inherit system;
-    config = {
-      allowUnfree = true;
-    };
-  };
+  oldNixpkgs =
+    import
+      (builtins.fetchTarball {
+        url = "https://github.com/NixOS/nixpkgs/archive/b0d522069803a9c9eb523bee7bdb95f74844b6a8.tar.gz";
+        sha256 = "02g0pd76wpjrj38d558j8svmps7xk8s8ddjkkyn9kswfmr7xn3c7";
+      })
+      {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
 
   oldDavinciResolveStudio = oldNixpkgs.davinci-resolve-studio;
   nonFhsOriginalDavici = oldDavinciResolveStudio.passthru.davinci;
-  
+
   davinciPatched = nonFhsOriginalDavici.overrideAttrs (
     finalAttrs: prevAttrs: {
       # https://stackoverflow.com/a/17168777

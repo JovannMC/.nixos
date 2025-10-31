@@ -1,4 +1,13 @@
-{ config, lib, nixpkgs, inputs, outputs, pkgs, ... }: {
+{
+  config,
+  lib,
+  nixpkgs,
+  inputs,
+  outputs,
+  pkgs,
+  ...
+}:
+{
 
   imports = [ inputs.home-manager.nixosModules.home-manager ];
 
@@ -11,8 +20,7 @@
       wlx-overlay-s = {
         name = "wlx-overlay-s";
         genericName = "VR Overlay";
-        exec =
-          "LIBMONADO_PATH=${pkgs.wivrn}/lib/wivrn/lib/libmonado_wivrn.so wlx-overlay-s --openxr";
+        exec = "LIBMONADO_PATH=${pkgs.wivrn}/lib/wivrn/lib/libmonado_wivrn.so wlx-overlay-s --openxr";
         terminal = true;
         categories = [ "Application" ];
         mimeType = [ ];

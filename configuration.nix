@@ -2,12 +2,24 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
-  imports = [ ./home.nix ./keyboard-knob-remap.nix ];
+  imports = [
+    ./home.nix
+    ./keyboard-knob-remap.nix
+  ];
 
   boot = {
     loader = {
@@ -24,8 +36,7 @@
     };
 
     # for OBS virtual camera
-    extraModulePackages = with config.boot.kernelPackages;
-      [ v4l2loopback ];
+    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
     extraModprobeConfig = ''
       options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
     '';
@@ -36,9 +47,11 @@
     hostName = "mayabox";
     # Pick only one of the below networking options.
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-    networkmanager.enable =
-      true; # Easiest to use and most distros use this by default.
-    nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+    networkmanager.enable = true; # Easiest to use and most distros use this by default.
+    nameservers = [
+      "1.1.1.1#one.one.one.one"
+      "1.0.0.1#one.one.one.one"
+    ];
   };
 
   # Set your time zone.
@@ -60,14 +73,24 @@
     bluetooth = {
       enable = true; # enables support for Bluetooth
       powerOnBoot = true; # powers up the default Bluetooth controller on boot
-      settings = { General = { Experimental = true; }; };
+      settings = {
+        General = {
+          Experimental = true;
+        };
+      };
     };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jovannmc = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "vboxusers" "dialout" "libvirtd" "input" ];
+    extraGroups = [
+      "wheel"
+      "vboxusers"
+      "dialout"
+      "libvirtd"
+      "input"
+    ];
     shell = pkgs.zsh;
     #packages = with pkgs; [
     #];
@@ -199,7 +222,12 @@
 
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" "dirhistory" "history" "direnv" ];
+        plugins = [
+          "git"
+          "dirhistory"
+          "history"
+          "direnv"
+        ];
         theme = "robbyrussell";
       };
     };
@@ -218,8 +246,10 @@
     };
 
     spicetify =
-      let spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-      in {
+      let
+        spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+      in
+      {
         enable = true;
 
         enabledExtensions = with spicePkgs.extensions; [
@@ -264,7 +294,10 @@
 
     steam = {
       enable = true;
-      extraCompatPackages = with pkgs; [ proton-ge-bin proton-ge-rtsp-bin ];
+      extraCompatPackages = with pkgs; [
+        proton-ge-bin
+        proton-ge-rtsp-bin
+      ];
     };
 
     partition-manager.enable = true;
@@ -311,7 +344,10 @@
       enable = true;
       dnssec = "true";
       domains = [ "~." ];
-      fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+      fallbackDns = [
+        "1.1.1.1#one.one.one.one"
+        "1.0.0.1#one.one.one.one"
+      ];
       dnsovertls = "true";
     };
     openssh.enable = true;
@@ -377,19 +413,26 @@
   };
 
   environment = {
-    variables = { GAY = "maya"; };
+    variables = {
+      GAY = "maya";
+    };
     sessionVariables = {
       # issue with gpu accel on wayland: https://github.com/electron/electron/issues/45862 & https://github.com/NixOS/nixpkgs/issues/382612
       # thanks chromium (https://issues.chromium.org/issues/396434686)
       NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-        "\${HOME}/.steam/root/compatibilitytools.d";
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
     };
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 3389 5900 ];
-  networking.firewall.allowedUDPPorts = [ 3389 5900 ];
+  networking.firewall.allowedTCPPorts = [
+    3389
+    5900
+  ];
+  networking.firewall.allowedUDPPorts = [
+    3389
+    5900
+  ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
@@ -418,4 +461,3 @@
   system.stateVersion = "25.05"; # Did you read the comment?
 
 }
-
