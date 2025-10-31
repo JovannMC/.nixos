@@ -43,15 +43,15 @@ let
             click_count=$(${pkgs.coreutils}/bin/cat "$CLICK_COUNT_FILE" 2>/dev/null || echo "0")
             if [ "$click_count" -eq 1 ]; then
               echo "Detected single click - toggling play/pause"
-              ${pkgs.playerctl}/bin/playerctl play-pause
+              ${pkgs.playerctl}/bin/playerctl --player=spotify,vlc,%any play-pause
             elif [ "$click_count" -eq 2 ]; then
               echo "Detected double click - skipping to next track"
-              ${pkgs.playerctl}/bin/playerctl next
+              ${pkgs.playerctl}/bin/playerctl --player=spotify,vlc,%any next
             elif [ "$click_count" -eq 3 ]; then
               echo "Detected triple click - skipping to previous track"
-              ${pkgs.playerctl}/bin/playerctl previous
+              ${pkgs.playerctl}/bin/playerctl --player=spotify,vlc,%any previous
             elif [ "$click_count" -eq 4 ]; then
-              echo "Detected quadruple click - toggling mute"
+              echo "Detected quadruple click - toggling system volume mute"
               ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
             fi
             ${pkgs.coreutils}/bin/rm -f "$LOCKFILE"
