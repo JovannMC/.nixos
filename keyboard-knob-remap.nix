@@ -50,6 +50,9 @@ let
             elif [ "$click_count" -eq 3 ]; then
               echo "Detected triple click - skipping to previous track"
               ${pkgs.playerctl}/bin/playerctl previous
+            elif [ "$click_count" -eq 4 ]; then
+              echo "Detected quadruple click - toggling mute"
+              ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
             fi
             ${pkgs.coreutils}/bin/rm -f "$LOCKFILE"
             ${pkgs.coreutils}/bin/rm -f "$CLICK_COUNT_FILE"
@@ -78,10 +81,6 @@ in
       ExecStart = "${muteKeyMonitor}/bin/mute-key-monitor";
       Restart = "on-failure";
       RestartSec = 5;
-      Environment = [
-        "DBUS_SESSION_BUS_ADDRESS=${builtins.getEnv "DBUS_SESSION_BUS_ADDRESS"}"
-        "XDG_RUNTIME_DIR=${builtins.getEnv "XDG_RUNTIME_DIR"}"
-      ];
     };
   };
 
