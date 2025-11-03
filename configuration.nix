@@ -146,6 +146,7 @@
       withRtmp = true;
     })
     playerctl
+    uxplay
 
     # chat
     vesktop
@@ -200,6 +201,9 @@
     kdePackages.krdc
     kdePackages.krfb
     remmina
+    localsend
+    moonlight-qt
+    yubioath-flutter
   ];
 
   programs = {
@@ -328,7 +332,7 @@
     printing = {
       enable = true;
       drivers = [
-        #pkgs.hplipWithPlugin
+        pkgs.hplipWithPlugin
       ];
     };
 
@@ -424,14 +428,23 @@
     };
   };
 
+  #UDP 7011 6001 6000 TCP 7100 7000 7001
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
-    3389
-    5900
+    3389 # rdp
+    5900 # vnc
+    7100 # uxplay
+    7000 # uxplay
+    7001 # uxplay
   ];
   networking.firewall.allowedUDPPorts = [
-    3389
-    5900
+    3389 # rdp
+    5900 # vnc
+    5353 # uxplay
+    7011 # uxplay
+    6001 # uxplay
+    6000 # uxplay
   ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
