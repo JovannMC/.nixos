@@ -137,7 +137,6 @@
     fastfetch
     hyfetch
     pciutils # gpu support for hyfetch.. even though it is in hyfetch's nix expression
-    android-tools
     scrcpy
     uxplay
     zsh-you-should-use
@@ -147,6 +146,7 @@
     })
     playerctl
     uxplay
+    busybox
 
     # chat
     vesktop
@@ -163,6 +163,7 @@
     opencomposite
     bs-manager
     sidequest
+    inputs.parsecgaming.packages.x86_64-linux.parsecgaming
 
     # networking
     qbittorrent
@@ -175,19 +176,6 @@
     spotify
     fahclient
     (pkgs.callPackage ./davinci-resolve-paid.nix { })
-    (pkgs.wrapOBS {
-      plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
-        obs-backgroundremoval
-        obs-pipewire-audio-capture
-        obs-dvd-screensaver
-        obs-freeze-filter
-        obs-multi-rtmp
-        obs-media-controls
-        obs-vkcapture
-        waveform
-      ];
-    })
 
     # utilities
     gparted
@@ -211,6 +199,7 @@
     pay-respects.enable = true;
     nix-index.enable = true;
     noisetorch.enable = true;
+    adb.enable = true;
 
     zsh = {
       enable = true;
@@ -304,6 +293,28 @@
       ];
     };
 
+    obs-studio = {
+      enable = true;
+
+      package = (
+        pkgs.obs-studio.override {
+          cudaSupport = true;
+        }
+      );
+
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        obs-backgroundremoval
+        obs-pipewire-audio-capture
+        obs-dvd-screensaver
+        obs-freeze-filter
+        obs-multi-rtmp
+        obs-media-controls
+        obs-vkcapture
+        waveform
+      ];
+    };
+
     partition-manager.enable = true;
     kdeconnect.enable = true;
     java.enable = true;
@@ -334,6 +345,12 @@
       drivers = [
         pkgs.hplipWithPlugin
       ];
+    };
+
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
     };
 
     # Enable sound.
@@ -368,6 +385,7 @@
       # thank you LVRA discord for helping me fix my weird issue lmfao
       # "it could be that wivrn is writing an older path for oc and messing it up"
       extraServerFlags = [ "--no-manage-active-runtime" ];
+      #package = pkgs.wivrn;
 
       # config = {
       #   enable = true;
@@ -425,10 +443,9 @@
       # thanks chromium (https://issues.chromium.org/issues/396434686)
       NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+      ADB_LIBUSB = "0"; # adb broken - see https://github.com/nmeum/android-tools/issues/153
     };
   };
-
-  #UDP 7011 6001 6000 TCP 7100 7000 7001
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
@@ -437,6 +454,7 @@
     7100 # uxplay
     7000 # uxplay
     7001 # uxplay
+    9999 # localsend
   ];
   networking.firewall.allowedUDPPorts = [
     3389 # rdp
@@ -445,6 +463,7 @@
     7011 # uxplay
     6001 # uxplay
     6000 # uxplay
+    9999 # localsend
   ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

@@ -22,6 +22,7 @@ let
     echo "Monitoring device: $KEYBOARD_DEVICE"
 
     ${pkgs.evtest}/bin/evtest "$KEYBOARD_DEVICE" 2>/dev/null | while read line; do
+      # detect mute key (code 113) press
       if echo "$line" | ${pkgs.gnugrep}/bin/grep -q "code 113.*value 1"; then
         current_time=$(${pkgs.coreutils}/bin/date +%s.%N)
 
@@ -59,6 +60,11 @@ let
           fi
         ) &
       fi
+
+      # detect key_calc (code 140) press
+      # if echo "$line" | ${pkgs.gnugrep}/bin/grep -q "code 140.*value 1"; then
+      #   # do something, konsole doesnt work lol
+      # fi
     done
   '';
 

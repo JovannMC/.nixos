@@ -8,6 +8,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
+    parsecgaming.url = "github:DarthPJB/parsec-gaming-nix";
   };
 
   outputs =
@@ -17,6 +18,7 @@
       nixpkgs-xr,
       home-manager,
       spicetify-nix,
+      parsecgaming,
     }@inputs:
     {
       nixosConfigurations = {
