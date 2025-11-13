@@ -164,6 +164,7 @@
     bs-manager
     sidequest
     inputs.parsecgaming.packages.x86_64-linux.parsecgaming
+    slimevr
 
     # networking
     qbittorrent
