@@ -11,10 +11,20 @@
 }:
 
 {
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix = {
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+
+    optimise.automatic = true;
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+  };
 
   imports = [
     ./home.nix
@@ -193,6 +203,7 @@
     localsend
     moonlight-qt
     yubioath-flutter
+    handbrake
   ];
 
   programs = {

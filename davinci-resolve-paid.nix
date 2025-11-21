@@ -1,5 +1,4 @@
 {
-  davinci-resolve-studio,
   hexdump,
   replaceDependencies,
   system ? "x86_64-linux",
@@ -9,8 +8,8 @@ let
   oldNixpkgs =
     import
       (builtins.fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/b0d522069803a9c9eb523bee7bdb95f74844b6a8.tar.gz";
-        sha256 = "02g0pd76wpjrj38d558j8svmps7xk8s8ddjkkyn9kswfmr7xn3c7";
+        url = "https://github.com/NixOS/nixpkgs/archive/2a574fe34c894ef2a343ee006f4228f4e006e5b9.tar.gz";
+        sha256 = "1ipqwcpi3s6p0vh5yw7v4127c6774iwwlq6ig1xm9ycmaz5dx8vm";
       })
       {
         inherit system;
