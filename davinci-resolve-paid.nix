@@ -2,6 +2,7 @@
   hexdump,
   replaceDependencies,
   system ? "x86_64-linux",
+  pkgs,
   ...
 }:
 let
@@ -17,6 +18,34 @@ let
           allowUnfree = true;
         };
       };
+
+  ffmpeg-encoder-plugin = pkgs.stdenv.mkDerivation (finalAttrs: {
+    pname = "ffmpeg-encoder-plugin";
+    version = "1.2.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "EdvinNilsson";
+      repo = "ffmpeg_encoder_plugin";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-b5MC8EMugK61Or4csjBYUJ0kBNJZpLN1+D84e2ZVFBo=";
+    };
+
+    nativeBuildInputs = with pkgs; [
+      cmake
+      ffmpeg-full
+    ];
+
+    buildInputs = with pkgs; [ ffmpeg ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp ffmpeg_encoder_plugin.dvcp $out/
+
+      runHook postInstall
+    '';
+  });
 
   oldDavinciResolveStudio = oldNixpkgs.davinci-resolve-studio;
   nonFhsOriginalDavici = oldDavinciResolveStudio.passthru.davinci;
@@ -39,8 +68,13 @@ let
           echo -en "\x85" | dd conv=notrunc of="$file" bs=1 seek=$instructionOffset count=1;
         fi
       '';
+      postInstall = ''
+        mkdir -p $out/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64/
+        cp ${ffmpeg-encoder-plugin}/ffmpeg_encoder_plugin.dvcp $out/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64/
+      '';
     }
   );
+
 in
 replaceDependencies {
   drv = oldDavinciResolveStudio;
