@@ -137,6 +137,7 @@
     alcom
     unityhub
     sourcegit
+    github-desktop
 
     # command line utilities
     wget
@@ -195,6 +196,7 @@
     nvidia-vaapi-driver
     recoll
     kdePackages.kalk
+    kdePackages.dragon
     pinta
     qdirstat
     kdePackages.krdc
@@ -204,6 +206,9 @@
     moonlight-qt
     yubioath-flutter
     handbrake
+    #alsa-utils
+    #pkgs.audiorelay
+    sonobus
   ];
 
   programs = {
@@ -223,6 +228,7 @@
       shellAliases = {
         ll = "ls -l";
         update = "sudo nixos-rebuild switch";
+        update-flake = "sudo nixos-rebuild switch --flake .#mayabox";
       };
 
       ohMyZsh = {
@@ -467,6 +473,7 @@
     7000 # uxplay
     7001 # uxplay
     9999 # localsend
+    #59100 # audiorelay
   ];
   networking.firewall.allowedUDPPorts = [
     3389 # rdp
@@ -476,6 +483,8 @@
     6001 # uxplay
     6000 # uxplay
     9999 # localsend
+    #59100 # audiorelay
+    #59200 # audiorelay discovery
   ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
