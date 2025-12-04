@@ -9,6 +9,7 @@
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
     parsecgaming.url = "github:DarthPJB/parsec-gaming-nix";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
   outputs =
@@ -19,6 +20,7 @@
       home-manager,
       spicetify-nix,
       parsecgaming,
+      nix-flatpak,
     }@inputs:
     {
       nixosConfigurations = {
@@ -30,6 +32,7 @@
             nixpkgs-xr.nixosModules.nixpkgs-xr
             home-manager.nixosModules.home-manager
             spicetify-nix.nixosModules.default
+            nix-flatpak.nixosModules.nix-flatpak
           ];
         };
       };

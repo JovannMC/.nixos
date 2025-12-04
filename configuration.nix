@@ -179,6 +179,7 @@
 
     # networking
     qbittorrent
+    protonvpn-gui
 
     # other
     librewolf
@@ -449,7 +450,13 @@
     };
 
     tailscale.enable = true;
-    flatpak.enable = true;
+    flatpak = {
+      enable = true;
+      packages = [
+        "org.vinegarhq.Sober"
+        "org.jdownloader.JDownloader"
+      ];
+    };
   };
 
   environment = {
