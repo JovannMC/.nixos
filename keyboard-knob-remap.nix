@@ -18,7 +18,7 @@ let
     CLICK_COUNT_FILE="/tmp/mute_key_click_count_$USER"
     DOUBLE_CLICK_TIMEOUT=0.3
 
-    KEYBOARD_DEVICE="/dev/input/event5" # idk if this changes? 21.11.2025 - yes, it does sometimes
+    KEYBOARD_DEVICE="/dev/input/event4" # idk if this changes? 21.11.2025 - yes, it does every time kb is replugged / on system reboot
     echo "Monitoring device: $KEYBOARD_DEVICE"
 
     ${pkgs.evtest}/bin/evtest "$KEYBOARD_DEVICE" 2>/dev/null | while read line; do

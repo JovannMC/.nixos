@@ -127,6 +127,8 @@
     gcc
     undollar
     rust-analyzer
+    jetbrains-toolbox
+    jdk17
 
     # editors
     micro
@@ -158,6 +160,7 @@
     playerctl
     uxplay
     busybox
+    xclicker
 
     # chat
     vesktop
@@ -189,6 +192,7 @@
     spotify
     fahclient
     (pkgs.callPackage ./davinci-resolve-paid.nix { })
+    oneko
 
     # utilities
     gparted
@@ -336,7 +340,6 @@
 
     partition-manager.enable = true;
     kdeconnect.enable = true;
-    java.enable = true;
     wireshark.enable = true;
     direnv.enable = true;
     virt-manager.enable = true;
