@@ -18,7 +18,23 @@ let
     CLICK_COUNT_FILE="/tmp/mute_key_click_count_$USER"
     DOUBLE_CLICK_TIMEOUT=0.3
 
-    KEYBOARD_DEVICE="/dev/input/event4" # idk if this changes? 21.11.2025 - yes, it does every time kb is replugged / on system reboot
+    KEYBOARD_NAME="BY Tech Gaming Keyboard Consumer Control"
+
+    KEYBOARD_DEVICE=$(
+      for dev in /dev/input/event*; do
+        name=$(cat "/sys/class/input/$(basename "$dev")/device/name" 2>/dev/null || true)
+        if [ "$name" = "$KEYBOARD_NAME" ]; then
+          echo "$dev"
+          break
+        fi
+      done
+    )
+
+    if [ -z "$KEYBOARD_DEVICE" ]; then
+      echo "Keyboard '$KEYBOARD_NAME' not found" >&2
+      exit 1
+    fi
+
     echo "Monitoring device: $KEYBOARD_DEVICE"
 
     ${pkgs.evtest}/bin/evtest "$KEYBOARD_DEVICE" 2>/dev/null | while read line; do
