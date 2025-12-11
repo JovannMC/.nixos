@@ -10,6 +10,7 @@
     spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
     parsecgaming.url = "github:DarthPJB/parsec-gaming-nix";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
   };
 
   outputs =
@@ -21,6 +22,7 @@
       spicetify-nix,
       parsecgaming,
       nix-flatpak,
+      nix-cachyos-kernel,
     }@inputs:
     {
       nixosConfigurations = {
@@ -28,6 +30,13 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
+            (
+              { pkgs, ... }:
+              {
+                nixpkgs.overlays = [ nix-cachyos-kernel.overlay ];
+                boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts-lto;
+              }
+            )
             ./hosts/mayabox/configuration.nix
             nixpkgs-xr.nixosModules.nixpkgs-xr
             home-manager.nixosModules.home-manager
