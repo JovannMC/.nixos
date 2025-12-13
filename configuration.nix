@@ -161,6 +161,8 @@
     uxplay
     busybox
     xclicker
+    yt-dlp
+    spotdl
 
     # chat
     vesktop
@@ -475,29 +477,35 @@
     };
   };
 
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [
-    3389 # rdp
-    5900 # vnc
-    7100 # uxplay
-    7000 # uxplay
-    7001 # uxplay
-    9999 # localsend
-    #59100 # audiorelay
-  ];
-  networking.firewall.allowedUDPPorts = [
-    3389 # rdp
-    5900 # vnc
-    5353 # uxplay
-    7011 # uxplay
-    6001 # uxplay
-    6000 # uxplay
-    9999 # localsend
-    #59100 # audiorelay
-    #59200 # audiorelay discovery
-  ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking = {
+    firewall = {
+      # Open ports in the firewall.
+      allowedTCPPorts = [
+        3389 # rdp
+        5900 # vnc
+        7100 # uxplay
+        7000 # uxplay
+        7001 # uxplay
+        9999 # localsend
+        #59100 # audiorelay
+      ];
+      allowedUDPPorts = [
+        3389 # rdp
+        5900 # vnc
+        5353 # uxplay
+        7011 # uxplay
+        6001 # uxplay
+        6000 # uxplay
+        9999 # localsend
+        #59100 # audiorelay
+        #59200 # audiorelay discovery
+      ];
+    };
+    # Or disable the firewall altogether.
+    # networking.firewall.enable = false;
+
+    networkmanager.packages = [ pkgs.networkmanager-openvpn ];
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
