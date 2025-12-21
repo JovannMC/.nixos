@@ -163,6 +163,10 @@
     xclicker
     yt-dlp
     spotdl
+    wineWowPackages.stable
+    wineWowPackages.stable
+    wineWowPackages.waylandFull
+    winetricks
 
     # chat
     vesktop
@@ -216,6 +220,9 @@
     #alsa-utils
     #pkgs.audiorelay
     sonobus
+    easyeffects
+    losslesscut-bin
+    qdirstat
   ];
 
   programs = {
@@ -236,6 +243,7 @@
         ll = "ls -l";
         update = "sudo nixos-rebuild switch";
         update-flake = "sudo nixos-rebuild switch --flake .#mayabox";
+        upgrade-flake = "nix flake update && sudo nixos-rebuild switch --flake .#mayabox";
       };
 
       ohMyZsh = {
@@ -409,7 +417,15 @@
       # thank you LVRA discord for helping me fix my weird issue lmfao
       # "it could be that wivrn is writing an older path for oc and messing it up"
       extraServerFlags = [ "--no-manage-active-runtime" ];
-      #package = pkgs.wivrn;
+      package = pkgs.wivrn.overrideAttrs (old: rec {
+        version = "1a35e1f7fc020ea4f0c1adc24aa5b41f532b8cc8";
+        src = pkgs.fetchFromGitHub {
+          owner = "WiVRn";
+          repo = "WiVRn";
+          rev = version;
+          hash = "sha256-5ucHQPQPdRlPVAzEGK7BdMi/2wkwSdEAlp+qTcNbOPU=";
+        };
+      });
 
       # config = {
       #   enable = true;
@@ -487,6 +503,11 @@
         7000 # uxplay
         7001 # uxplay
         9999 # localsend
+        5173 # vite
+        4173 # vite
+        6969 # slimevr discovery
+        9000 # slimevr osc
+        9001 # slimevr osc
         #59100 # audiorelay
       ];
       allowedUDPPorts = [
@@ -497,6 +518,11 @@
         6001 # uxplay
         6000 # uxplay
         9999 # localsend
+        5173 # vite
+        4173 # vite
+        6969 # slimevr discovery
+        9000 # slimevr osc
+        9001 # slimevr osc
         #59100 # audiorelay
         #59200 # audiorelay discovery
       ];
