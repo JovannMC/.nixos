@@ -28,7 +28,7 @@
 
   imports = [
     ./home.nix
-    ./keyboard-knob-remap.nix
+    ./apps/keyboard-knob-remap.nix
   ];
 
   boot = {
@@ -122,6 +122,7 @@
     # programming
     python3
     nodejs
+    corepack
     bun
     gnumake
     gcc
@@ -140,6 +141,7 @@
     unityhub
     sourcegit
     github-desktop
+    inkscape
 
     # command line utilities
     wget
@@ -197,7 +199,7 @@
     filezilla
     spotify
     fahclient
-    (pkgs.callPackage ./davinci-resolve-paid.nix { })
+    (pkgs.callPackage ./apps/davinci-resolve-paid.nix { })
     oneko
 
     # utilities
@@ -223,6 +225,8 @@
     easyeffects
     losslesscut-bin
     qdirstat
+    qpwgraph
+    lutris
   ];
 
   programs = {
@@ -505,6 +509,7 @@
         9999 # localsend
         5173 # vite
         4173 # vite
+        3000 # vite
         6969 # slimevr discovery
         9000 # slimevr osc
         9001 # slimevr osc
@@ -520,6 +525,7 @@
         9999 # localsend
         5173 # vite
         4173 # vite
+        3000 # vite
         6969 # slimevr discovery
         9000 # slimevr osc
         9001 # slimevr osc
