@@ -498,6 +498,15 @@
         "org.jdownloader.JDownloader"
       ];
     };
+
+    udev.extraHwdb = ''
+      # disable hi-res scrolling for Attack Shark X6
+      # omfg this issue was driving me crazy cause it only happened on linux, and not my other machines
+      evdev:input:b0003v1d57pfa60*
+       EVDEV_ABS_REL_WHEEL_HI_RES=n:0:0:0
+       EVDEV_ABS_REL_HWHEEL_HI_RES=n:0:0:0
+    '';
+
   };
 
   environment = {
