@@ -109,6 +109,7 @@
   virtualisation = {
     libvirtd.enable = true;
     spiceUSBRedirection.enable = true;
+    waydroid.enable = true;
   };
 
   nixpkgs.config = {
@@ -214,6 +215,7 @@
     qdirstat
     kdePackages.krdc
     kdePackages.krfb
+    kdePackages.isoimagewriter
     remmina
     localsend
     moonlight-qt
@@ -227,6 +229,8 @@
     qdirstat
     qpwgraph
     lutris
+    persepolis
+    netpeek
   ];
 
   programs = {
@@ -373,6 +377,8 @@
       sddm.enable = true;
       sddm.wayland.enable = false;
       defaultSession = "plasma";
+      autoLogin.enable = true;
+      autoLogin.user = "jovannmc";
     };
 
     # Enable CUPS to print documents.
@@ -430,6 +436,16 @@
           hash = "sha256-5ucHQPQPdRlPVAzEGK7BdMi/2wkwSdEAlp+qTcNbOPU=";
         };
       });
+
+      #       package = pkgs.wivrn.overrideAttrs (old: rec {
+      #   version = "1e488a8a9c4be6fefae1fc63d9f23f65ebf53a06";
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "WiVRn";
+      #     repo = "WiVRn";
+      #     rev = version;
+      #     hash = "sha256-acsxbb3XKzpCkZUtkL3jfpk7qoBc7LU+VtQ7bA6JMCc=";
+      #   };
+      # });
 
       # config = {
       #   enable = true;
@@ -513,6 +529,8 @@
         6969 # slimevr discovery
         9000 # slimevr osc
         9001 # slimevr osc
+        25565 # minecraft server
+        8100 # mc server bluemap
         #59100 # audiorelay
       ];
       allowedUDPPorts = [
@@ -529,6 +547,8 @@
         6969 # slimevr discovery
         9000 # slimevr osc
         9001 # slimevr osc
+        25565 # minecraft server
+        8100 # mc server bluemap
         #59100 # audiorelay
         #59200 # audiorelay discovery
       ];
