@@ -231,6 +231,7 @@
     lutris
     persepolis
     netpeek
+    tigervnc
   ];
 
   programs = {
