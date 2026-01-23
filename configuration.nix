@@ -182,7 +182,7 @@
 
     # games
     prismlauncher
-    wlx-overlay-s
+    wayvr
     opencomposite
     bs-manager
     sidequest
@@ -192,6 +192,7 @@
     # networking
     qbittorrent
     protonvpn-gui
+    android-tools
 
     # other
     librewolf
@@ -239,7 +240,6 @@
     pay-respects.enable = true;
     nix-index.enable = true;
     noisetorch.enable = true;
-    adb.enable = true;
 
     zsh = {
       enable = true;
@@ -262,6 +262,7 @@
           "dirhistory"
           "history"
           "direnv"
+          "timer"
         ];
         theme = "robbyrussell";
       };
@@ -406,13 +407,15 @@
 
     resolved = {
       enable = true;
-      dnssec = "true";
-      domains = [ "~." ];
-      fallbackDns = [
-        "1.1.1.1#one.one.one.one"
-        "1.0.0.1#one.one.one.one"
-      ];
-      dnsovertls = "true";
+      settings.Resolve = {
+        DNSSEC = "true";
+        Domains = [ "~." ];
+        FallbackDNS = [
+          "1.1.1.1#one.one.one.one"
+          "1.0.0.1#one.one.one.one"
+        ];
+        DNSOverTLS = "true";
+      };
     };
     openssh.enable = true;
     blueman.enable = true;
@@ -428,15 +431,6 @@
       # thank you LVRA discord for helping me fix my weird issue lmfao
       # "it could be that wivrn is writing an older path for oc and messing it up"
       extraServerFlags = [ "--no-manage-active-runtime" ];
-      package = pkgs.wivrn.overrideAttrs (old: rec {
-        version = "1a35e1f7fc020ea4f0c1adc24aa5b41f532b8cc8";
-        src = pkgs.fetchFromGitHub {
-          owner = "WiVRn";
-          repo = "WiVRn";
-          rev = version;
-          hash = "sha256-5ucHQPQPdRlPVAzEGK7BdMi/2wkwSdEAlp+qTcNbOPU=";
-        };
-      });
 
       #       package = pkgs.wivrn.overrideAttrs (old: rec {
       #   version = "1e488a8a9c4be6fefae1fc63d9f23f65ebf53a06";
@@ -504,8 +498,8 @@
       # disable hi-res scrolling for Attack Shark X6
       # omfg this issue was driving me crazy cause it only happened on linux, and not my other machines
       evdev:input:b0003v1d57pfa60*
-       EVDEV_ABS_REL_WHEEL_HI_RES=n:0:0:0
-       EVDEV_ABS_REL_HWHEEL_HI_RES=n:0:0:0
+       EVDEV_REL_WHEEL_HI_RES=n:0:0:0
+       EVDEV_REL_HWHEEL_HI_RES=n:0:0:0
     '';
 
   };
@@ -566,7 +560,7 @@
     # Or disable the firewall altogether.
     # networking.firewall.enable = false;
 
-    networkmanager.packages = [ pkgs.networkmanager-openvpn ];
+    networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
