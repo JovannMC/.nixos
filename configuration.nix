@@ -173,6 +173,7 @@
 
     # chat
     vesktop
+    arrpc
     nheko
     #kdePackages.neochat
     telegram-desktop
@@ -233,6 +234,36 @@
     persepolis
     netpeek
     tigervnc
+
+    # discord lol
+    (
+      let
+        patch-krisp = writers.writePython3 "krisp-patcher" {
+          libraries = with python3Packages; [
+            capstone
+            pyelftools
+          ];
+          flakeIgnore = [
+            "E501"
+            "F403"
+            "F405"
+          ];
+        } (builtins.readFile ./apps/krisp-patcher.py); # thank you https://git.gay/amida/krisp-patcher/ and AnnoyingRains lmao
+        binaryName = "DiscordCanary";
+        node_module = "\\$HOME/.config/discordcanary/${discord-canary.version}/modules/discord_krisp/discord_krisp.node";
+      in
+      (discord-canary.override {
+        withVencord = true;
+        withOpenASAR = true;
+      }).overrideAttrs
+        (previousAttrs: {
+          postInstall = previousAttrs.postInstall + ''
+            wrapProgramShell $out/opt/${binaryName}/${binaryName} \
+            --run "${patch-krisp} ${node_module}"
+          '';
+          passthru = removeAttrs previousAttrs.passthru [ "updateScript" ];
+        })
+    )
   ];
 
   programs = {
@@ -253,6 +284,8 @@
         update = "sudo nixos-rebuild switch";
         update-flake = "sudo nixos-rebuild switch --flake .#mayabox";
         upgrade-flake = "nix flake update && sudo nixos-rebuild switch --flake .#mayabox";
+        upgrade-nixpkgs = "nix flake update nixpkgs && sudo nixos-rebuild switch --flake .#mayabox";
+        upgrade-kernel = "nix flake update nix-cachyos-kernel && sudo nixos-rebuild switch --flake .#mayabox";
       };
 
       ohMyZsh = {
@@ -333,6 +366,7 @@
       extraCompatPackages = with pkgs; [
         proton-ge-bin
         proton-ge-rtsp-bin
+        pkgs.steam-play-none
       ];
     };
 
@@ -504,6 +538,7 @@
 
   };
 
+  systemd.packages = with pkgs; [ arrpc ];
   environment = {
     variables = {
       GAY = "maya";
