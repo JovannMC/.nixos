@@ -531,11 +531,16 @@
     udev.extraHwdb = ''
       # disable hi-res scrolling for Attack Shark X6
       # omfg this issue was driving me crazy cause it only happened on linux, and not my other machines
+      # nvm its not fixed its literally just from replugging the usb, it eventually comes back :(
       evdev:input:b0003v1d57pfa60*
        EVDEV_REL_WHEEL_HI_RES=n:0:0:0
        EVDEV_REL_HWHEEL_HI_RES=n:0:0:0
     '';
 
+    cloudflare-warp = {
+      enable = true;
+      openFirewall = true;
+    };
   };
 
   systemd.packages = with pkgs; [ arrpc ];
