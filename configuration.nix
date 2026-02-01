@@ -117,154 +117,174 @@
     permittedInsecurePackages = [ "olm-3.2.16" ];
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    # programming
-    python3
-    nodejs
-    corepack
-    bun
-    gnumake
-    gcc
-    undollar
-    rust-analyzer
-    jetbrains-toolbox
-    jdk17
+  environment = {
+    variables = {
+      GAY = "maya";
+    };
+    sessionVariables = {
+      # issue with gpu accel on wayland: https://github.com/electron/electron/issues/45862 & https://github.com/NixOS/nixpkgs/issues/382612
+      # thanks chromium (https://issues.chromium.org/issues/396434686)
+      NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+      ADB_LIBUSB = "0"; # adb broken - see https://github.com/nmeum/android-tools/issues/153
+    };
 
-    # editors
-    micro
-    vscode
-    audacity
-    blender
-    libreoffice
-    alcom
-    unityhub
-    sourcegit
-    github-desktop
-    inkscape
+    etc."libinput/local-overrides.quirks".text = ''
+      [Attack Shark X6 scroll fix]
+      MatchName=*Attack*Shark*
+      MatchUdevType=mouse
+      AttrEventCodeDisable=REL_WHEEL_HI_RES;REL_HWHEEL_HI_RES
+    '';
 
-    # command line utilities
-    wget
-    git
-    tree
-    nixfmt
-    btop
-    fastfetch
-    hyfetch
-    pciutils # gpu support for hyfetch.. even though it is in hyfetch's nix expression
-    scrcpy
-    uxplay
-    zsh-you-should-use
-    (pkgs.ffmpeg-full.override {
-      withOpengl = true;
-      withRtmp = true;
-    })
-    playerctl
-    uxplay
-    busybox
-    xclicker
-    yt-dlp
-    spotdl
-    wineWowPackages.stable
-    wineWowPackages.stable
-    wineWowPackages.waylandFull
-    winetricks
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    systemPackages = with pkgs; [
+      # programming
+      python3
+      nodejs
+      corepack
+      bun
+      gnumake
+      gcc
+      undollar
+      rust-analyzer
+      jetbrains-toolbox
+      jdk17
 
-    # chat
-    vesktop
-    arrpc
-    nheko
-    #kdePackages.neochat
-    telegram-desktop
-    thunderbird
-    signal-desktop
-    slack
+      # editors
+      micro
+      vscode
+      audacity
+      blender
+      libreoffice
+      alcom
+      unityhub
+      sourcegit
+      github-desktop
+      inkscape
 
-    # games
-    prismlauncher
-    wayvr
-    opencomposite
-    bs-manager
-    sidequest
-    inputs.parsecgaming.packages.x86_64-linux.parsecgaming
-    slimevr
+      # command line utilities
+      wget
+      git
+      tree
+      nixfmt
+      btop
+      fastfetch
+      hyfetch
+      pciutils # gpu support for hyfetch.. even though it is in hyfetch's nix expression
+      scrcpy
+      uxplay
+      zsh-you-should-use
+      (pkgs.ffmpeg-full.override {
+        withOpengl = true;
+        withRtmp = true;
+      })
+      playerctl
+      uxplay
+      busybox
+      xclicker
+      yt-dlp
+      spotdl
+      wineWowPackages.stable
+      wineWowPackages.stable
+      wineWowPackages.waylandFull
+      winetricks
 
-    # networking
-    qbittorrent
-    protonvpn-gui
-    android-tools
+      # chat
+      vesktop
+      arrpc
+      nheko
+      #kdePackages.neochat
+      telegram-desktop
+      thunderbird
+      signal-desktop
+      slack
 
-    # other
-    librewolf
-    brave # helium for nix when
-    vlc
-    filezilla
-    spotify
-    fahclient
-    (pkgs.callPackage ./apps/davinci-resolve-paid.nix { })
-    oneko
+      # games
+      prismlauncher
+      wayvr
+      opencomposite
+      bs-manager
+      sidequest
+      inputs.parsecgaming.packages.x86_64-linux.parsecgaming
+      slimevr
 
-    # utilities
-    gparted
-    # gwe # no support for wayland
-    tuxclocker
-    nvidia-vaapi-driver
-    recoll
-    kdePackages.kalk
-    kdePackages.dragon
-    pinta
-    qdirstat
-    kdePackages.krdc
-    kdePackages.krfb
-    kdePackages.isoimagewriter
-    remmina
-    localsend
-    moonlight-qt
-    yubioath-flutter
-    handbrake
-    #alsa-utils
-    #pkgs.audiorelay
-    sonobus
-    easyeffects
-    losslesscut-bin
-    qdirstat
-    qpwgraph
-    lutris
-    persepolis
-    netpeek
-    tigervnc
+      # networking
+      qbittorrent
+      protonvpn-gui
+      android-tools
 
-    # discord lol
-    (
-      let
-        patch-krisp = writers.writePython3 "krisp-patcher" {
-          libraries = with python3Packages; [
-            capstone
-            pyelftools
-          ];
-          flakeIgnore = [
-            "E501"
-            "F403"
-            "F405"
-          ];
-        } (builtins.readFile ./apps/krisp-patcher.py); # thank you https://git.gay/amida/krisp-patcher/ and AnnoyingRains lmao
-        binaryName = "DiscordCanary";
-        node_module = "\\$HOME/.config/discordcanary/${discord-canary.version}/modules/discord_krisp/discord_krisp.node";
-      in
-      (discord-canary.override {
-        withVencord = true;
-        withOpenASAR = true;
-      }).overrideAttrs
-        (previousAttrs: {
-          postInstall = previousAttrs.postInstall + ''
-            wrapProgramShell $out/opt/${binaryName}/${binaryName} \
-            --run "${patch-krisp} ${node_module}"
-          '';
-          passthru = removeAttrs previousAttrs.passthru [ "updateScript" ];
-        })
-    )
-  ];
+      # other
+      librewolf
+      brave # helium for nix when
+      vlc
+      filezilla
+      spotify
+      fahclient
+      (pkgs.callPackage ./apps/davinci-resolve-paid.nix { })
+      oneko
+
+      # utilities
+      gparted
+      # gwe # no support for wayland
+      tuxclocker
+      nvidia-vaapi-driver
+      recoll
+      kdePackages.kalk
+      kdePackages.dragon
+      pinta
+      qdirstat
+      kdePackages.krdc
+      kdePackages.krfb
+      kdePackages.isoimagewriter
+      remmina
+      localsend
+      moonlight-qt
+      yubioath-flutter
+      handbrake
+      #alsa-utils
+      #pkgs.audiorelay
+      sonobus
+      easyeffects
+      losslesscut-bin
+      qdirstat
+      qpwgraph
+      lutris
+      persepolis
+      netpeek
+      tigervnc
+
+      # discord lol
+      (
+        let
+          patch-krisp = writers.writePython3 "krisp-patcher" {
+            libraries = with python3Packages; [
+              capstone
+              pyelftools
+            ];
+            flakeIgnore = [
+              "E501"
+              "F403"
+              "F405"
+            ];
+          } (builtins.readFile ./apps/krisp-patcher.py); # thank you https://git.gay/amida/krisp-patcher/ and AnnoyingRains lmao
+          binaryName = "DiscordCanary";
+          node_module = "\\$HOME/.config/discordcanary/${discord-canary.version}/modules/discord_krisp/discord_krisp.node";
+        in
+        (discord-canary.override {
+          withVencord = true;
+          withOpenASAR = true;
+        }).overrideAttrs
+          (previousAttrs: {
+            postInstall = previousAttrs.postInstall + ''
+              wrapProgramShell $out/opt/${binaryName}/${binaryName} \
+              --run "${patch-krisp} ${node_module}"
+            '';
+            passthru = removeAttrs previousAttrs.passthru [ "updateScript" ];
+          })
+      )
+    ];
+  };
 
   programs = {
     ssh.startAgent = true;
@@ -544,18 +564,6 @@
   };
 
   systemd.packages = with pkgs; [ arrpc ];
-  environment = {
-    variables = {
-      GAY = "maya";
-    };
-    sessionVariables = {
-      # issue with gpu accel on wayland: https://github.com/electron/electron/issues/45862 & https://github.com/NixOS/nixpkgs/issues/382612
-      # thanks chromium (https://issues.chromium.org/issues/396434686)
-      NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
-      ADB_LIBUSB = "0"; # adb broken - see https://github.com/nmeum/android-tools/issues/153
-    };
-  };
 
   networking = {
     firewall = {
