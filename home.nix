@@ -1,9 +1,5 @@
 {
-  config,
-  lib,
-  nixpkgs,
   inputs,
-  outputs,
   pkgs,
   ...
 }:

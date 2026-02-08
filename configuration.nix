@@ -4,7 +4,6 @@
 
 {
   config,
-  lib,
   pkgs,
   inputs,
   ...
@@ -37,6 +36,12 @@
         enable = true;
         devices = [ "nodev" ];
         efiSupport = true;
+        minegrub-theme = {
+          enable = true;
+          splash = "100% Flakes!";
+          background = "background_options/1.8  - [Classic Minecraft].png";
+          boot-options-count = 2;
+        };
       };
 
       efi = {
@@ -50,6 +55,11 @@
     extraModprobeConfig = ''
       options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
     '';
+
+    plymouth = {
+      enable = true;
+      plymouth-minecraft-theme.enable = true;
+    };
   };
   security.polkit.enable = true;
 
@@ -58,6 +68,7 @@
     # Pick only one of the below networking options.
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
+    networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
     nameservers = [
       "1.1.1.1#one.one.one.one"
       "1.0.0.1#one.one.one.one"
@@ -180,12 +191,10 @@
         withRtmp = true;
       })
       playerctl
-      uxplay
       busybox
       xclicker
       yt-dlp
       spotdl
-      wineWowPackages.stable
       wineWowPackages.stable
       wineWowPackages.waylandFull
       winetricks
@@ -223,6 +232,7 @@
       fahclient
       (pkgs.callPackage ./apps/davinci-resolve-paid.nix { })
       oneko
+      nixd
 
       # utilities
       gparted
@@ -287,10 +297,10 @@
   };
 
   programs = {
-    ssh.startAgent = true;
     pay-respects.enable = true;
     nix-index.enable = true;
     noisetorch.enable = true;
+    ssh.startAgent = true;
 
     zsh = {
       enable = true;
@@ -529,11 +539,11 @@
       capSysAdmin = true;
       openFirewall = true;
     };
-    foldingathome = {
-      enable = true;
-      team = 1066441;
-      user = "JovannMC";
-    };
+    # foldingathome = {
+    #   enable = true;
+    #   team = 1066441;
+    #   user = "JovannMC";
+    # };
     mullvad-vpn = {
       enable = true;
       package = pkgs.mullvad-vpn;
@@ -544,7 +554,6 @@
       enable = true;
       packages = [
         "org.vinegarhq.Sober"
-        "org.jdownloader.JDownloader"
       ];
     };
 
@@ -607,8 +616,17 @@
     };
     # Or disable the firewall altogether.
     # networking.firewall.enable = false;
+  };
 
-    networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
+  nix.settings = {
+    substituters = [
+      "https://cache.nixos-cuda.org"
+      "https://attic.xuyh0120.win/lantian"
+    ];
+    trusted-public-keys = [
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+    ];
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

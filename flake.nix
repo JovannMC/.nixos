@@ -11,6 +11,8 @@
     parsecgaming.url = "github:DarthPJB/parsec-gaming-nix";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
+    minecraft-plymouth.url = "github:nikp123/minecraft-plymouth-theme";
+    minegrub-theme.url = "github:Lxtharia/minegrub-theme";
   };
 
   outputs =
@@ -23,10 +25,12 @@
       parsecgaming,
       nix-flatpak,
       nix-cachyos-kernel,
+      minecraft-plymouth,
+      minegrub-theme,
     }@inputs:
     {
       nixosConfigurations = {
-        mayabox = nixpkgs.lib.nixosSystem rec {
+        mayabox = nixpkgs.lib.nixosSystem  {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
@@ -42,6 +46,8 @@
             home-manager.nixosModules.home-manager
             spicetify-nix.nixosModules.default
             nix-flatpak.nixosModules.nix-flatpak
+            minecraft-plymouth.nixosModules.default
+            minegrub-theme.nixosModules.default
           ];
         };
       };

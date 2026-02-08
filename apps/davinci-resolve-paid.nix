@@ -8,7 +8,7 @@
 let
   oldNixpkgs =
     import
-      (builtins.fetchTarball {
+      (fetchTarball {
         url = "https://github.com/NixOS/nixpkgs/archive/2a574fe34c894ef2a343ee006f4228f4e006e5b9.tar.gz";
         sha256 = "1ipqwcpi3s6p0vh5yw7v4127c6774iwwlq6ig1xm9ycmaz5dx8vm";
       })
