@@ -13,6 +13,10 @@
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
     minecraft-plymouth.url = "github:nikp123/minecraft-plymouth-theme";
     minegrub-theme.url = "github:Lxtharia/minegrub-theme";
+    minesddm = {
+      url = "github:Davi-S/sddm-theme-minesddm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -27,10 +31,11 @@
       nix-cachyos-kernel,
       minecraft-plymouth,
       minegrub-theme,
+      minesddm,
     }@inputs:
     {
       nixosConfigurations = {
-        mayabox = nixpkgs.lib.nixosSystem  {
+        mayabox = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [

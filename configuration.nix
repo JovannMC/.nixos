@@ -440,7 +440,10 @@
 
     desktopManager.plasma6.enable = true;
     displayManager = {
-      sddm.enable = true;
+      sddm = {
+        enable = true;
+        theme = "minesddm";
+      };
       sddm.wayland.enable = false;
       defaultSession = "plasma";
       autoLogin.enable = true;
