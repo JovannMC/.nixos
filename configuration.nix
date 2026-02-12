@@ -121,6 +121,7 @@
     libvirtd.enable = true;
     spiceUSBRedirection.enable = true;
     waydroid.enable = true;
+    docker.enable = true;
   };
 
   nixpkgs.config = {
@@ -198,6 +199,7 @@
       wineWowPackages.stable
       wineWowPackages.waylandFull
       winetricks
+      docker-compose
 
       # chat
       vesktop
@@ -301,6 +303,7 @@
     nix-index.enable = true;
     noisetorch.enable = true;
     ssh.startAgent = true;
+    openvpn3.enable = true;
 
     zsh = {
       enable = true;
