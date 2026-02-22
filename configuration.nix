@@ -226,7 +226,6 @@
       android-tools
 
       # other
-      librewolf
       brave # helium for nix when
       vlc
       filezilla
@@ -235,6 +234,7 @@
       (pkgs.callPackage ./apps/davinci-resolve-paid.nix { })
       oneko
       nixd
+      firefoxpwa
 
       # utilities
       gparted
@@ -304,6 +304,12 @@
     noisetorch.enable = true;
     ssh.startAgent = true;
     openvpn3.enable = true;
+
+    firefox = {
+      enable = true;
+      package = pkgs.librewolf;
+      nativeMessagingHosts.packages = [ pkgs.firefoxpwa ];
+    };
 
     zsh = {
       enable = true;
@@ -425,7 +431,7 @@
       ];
     };
 
-    partition-manager.enable = true;
+    gnome-disks.enable = true;
     kdeconnect.enable = true;
     wireshark.enable = true;
     direnv.enable = true;

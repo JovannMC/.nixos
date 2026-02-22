@@ -14,7 +14,9 @@ let
 
     LOCKFILE="/tmp/mute_key_double_click_$USER.lock"
     CLICK_COUNT_FILE="/tmp/mute_key_click_count_$USER"
+    LAST_PRESS_FILE="/tmp/mute_key_last_press_ns_$USER"
     DOUBLE_CLICK_TIMEOUT=0.3
+    DEBOUNCE_NS=50000000
 
     KEYBOARD_NAME="BY Tech Gaming Keyboard Consumer Control"
 
@@ -39,6 +41,16 @@ let
       # detect mute key (code 113) press
       if echo "$line" | ${pkgs.gnugrep}/bin/grep -q "code 113.*value 1"; then
         current_time=$(${pkgs.coreutils}/bin/date +%s.%N)
+        current_time_ns=$(${pkgs.coreutils}/bin/date +%s%N)
+
+        # debounce
+        if [ -f "$LAST_PRESS_FILE" ]; then
+          last_press_ns=$(${pkgs.coreutils}/bin/cat "$LAST_PRESS_FILE")
+          if [ $((current_time_ns - last_press_ns)) -lt $DEBOUNCE_NS ]; then
+            continue
+          fi
+        fi
+        echo "$current_time_ns" > "$LAST_PRESS_FILE"
 
         # increment click count
         if [ -f "$CLICK_COUNT_FILE" ]; then
@@ -71,6 +83,7 @@ let
             fi
             ${pkgs.coreutils}/bin/rm -f "$LOCKFILE"
             ${pkgs.coreutils}/bin/rm -f "$CLICK_COUNT_FILE"
+            ${pkgs.coreutils}/bin/rm -f "$LAST_PRESS_FILE"
           fi
         ) &
       fi
