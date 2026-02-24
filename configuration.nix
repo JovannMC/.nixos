@@ -196,8 +196,8 @@
       xclicker
       yt-dlp
       spotdl
-      wineWowPackages.stable
-      wineWowPackages.waylandFull
+      wineWow64Packages.stable
+      wineWow64Packages.waylandFull
       winetricks
       docker-compose
 
