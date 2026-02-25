@@ -200,6 +200,7 @@
       wineWow64Packages.waylandFull
       winetricks
       docker-compose
+      p7zip # for unity hub, actually install support lmao
 
       # chat
       vesktop
