@@ -201,6 +201,7 @@
       winetricks
       docker-compose
       p7zip # for unity hub, actually install support lmao
+      exiftool
 
       # chat
       vesktop
@@ -243,13 +244,14 @@
       tuxclocker
       nvidia-vaapi-driver
       recoll
-      kdePackages.kalk
-      kdePackages.dragon
       pinta
       qdirstat
+      kdePackages.kalk
+      kdePackages.dragon
       kdePackages.krdc
       kdePackages.krfb
       kdePackages.isoimagewriter
+      kdePackages.kimageformats
       remmina
       localsend
       moonlight-qt
@@ -267,35 +269,38 @@
       netpeek
       tigervnc
 
+      # currently broken, discord_krisp moved?
+      # -- FileNotFoundError: [Errno 2] No such file or directory: '/home/jovannmc/.config/discordcanary/0.0.871/modules/discord_krisp/discord_krisp.node'
       # discord lol
-      (
-        let
-          patch-krisp = writers.writePython3 "krisp-patcher" {
-            libraries = with python3Packages; [
-              capstone
-              pyelftools
-            ];
-            flakeIgnore = [
-              "E501"
-              "F403"
-              "F405"
-            ];
-          } (builtins.readFile ./apps/krisp-patcher.py); # thank you https://git.gay/amida/krisp-patcher/ and AnnoyingRains lmao
-          binaryName = "DiscordCanary";
-          node_module = "\\$HOME/.config/discordcanary/${discord-canary.version}/modules/discord_krisp/discord_krisp.node";
-        in
-        (discord-canary.override {
-          withVencord = true;
-          withOpenASAR = true;
-        }).overrideAttrs
-          (previousAttrs: {
-            postInstall = previousAttrs.postInstall + ''
-              wrapProgramShell $out/opt/${binaryName}/${binaryName} \
-              --run "${patch-krisp} ${node_module}"
-            '';
-            passthru = removeAttrs previousAttrs.passthru [ "updateScript" ];
-          })
-      )
+      # (
+      #   let
+      #     patch-krisp = writers.writePython3 "krisp-patcher" {
+      #       libraries = with python3Packages; [
+      #         capstone
+      #         pyelftools
+      #       ];
+      #       flakeIgnore = [
+      #         "E501"
+      #         "F403"
+      #         "F405"
+      #       ];
+      #     } (builtins.readFile ./apps/krisp-patcher.py); # thank you https://git.gay/amida/krisp-patcher/ and AnnoyingRains lmao
+      #     binaryName = "DiscordCanary";
+      #     node_module = "\\$HOME/.config/discordcanary/${discord-canary.version}/modules/discord_krisp/discord_krisp.node";
+      #   in
+      #   (discord-canary.override {
+      #     withVencord = true;
+      #     withOpenASAR = true;
+      #   }).overrideAttrs
+      #     (previousAttrs: {
+      #       postInstall = previousAttrs.postInstall + ''
+      #         wrapProgramShell $out/opt/${binaryName}/${binaryName} \
+      #         --run "${patch-krisp} ${node_module}"
+      #       '';
+      #       passthru = removeAttrs previousAttrs.passthru [ "updateScript" ];
+      #     })
+      # )
+      discord-canary
     ];
   };
 
@@ -563,6 +568,8 @@
     };
 
     tailscale.enable = true;
+    # zerotierone.enable = true;
+    #logmein-hamachi.enable = true;
     flatpak = {
       enable = true;
       packages = [
@@ -587,49 +594,49 @@
 
   systemd.packages = with pkgs; [ arrpc ];
 
-  networking = {
-    firewall = {
-      # Open ports in the firewall.
-      allowedTCPPorts = [
-        3389 # rdp
-        5900 # vnc
-        7100 # uxplay
-        7000 # uxplay
-        7001 # uxplay
-        9999 # localsend
-        5173 # vite
-        4173 # vite
-        3000 # vite
-        6969 # slimevr discovery
-        9000 # slimevr osc
-        9001 # slimevr osc
-        25565 # minecraft server
-        8100 # mc server bluemap
-        #59100 # audiorelay
-      ];
-      allowedUDPPorts = [
-        3389 # rdp
-        5900 # vnc
-        5353 # uxplay
-        7011 # uxplay
-        6001 # uxplay
-        6000 # uxplay
-        9999 # localsend
-        5173 # vite
-        4173 # vite
-        3000 # vite
-        6969 # slimevr discovery
-        9000 # slimevr osc
-        9001 # slimevr osc
-        25565 # minecraft server
-        8100 # mc server bluemap
-        #59100 # audiorelay
-        #59200 # audiorelay discovery
-      ];
-    };
-    # Or disable the firewall altogether.
-    # networking.firewall.enable = false;
-  };
+  # networking = {
+  #   firewall = {
+  #     # Open ports in the firewall.
+  #     allowedTCPPorts = [
+  #       3389 # rdp
+  #       5900 # vnc
+  #       7100 # uxplay
+  #       7000 # uxplay
+  #       7001 # uxplay
+  #       9999 # localsend
+  #       5173 # vite
+  #       4173 # vite
+  #       3000 # vite
+  #       6969 # slimevr discovery
+  #       9000 # slimevr osc
+  #       9001 # slimevr osc
+  #       25565 # minecraft server
+  #       8100 # mc server bluemap
+  #       #59100 # audiorelay
+  #     ];
+  #     allowedUDPPorts = [
+  #       3389 # rdp
+  #       5900 # vnc
+  #       5353 # uxplay
+  #       7011 # uxplay
+  #       6001 # uxplay
+  #       6000 # uxplay
+  #       9999 # localsend
+  #       5173 # vite
+  #       4173 # vite
+  #       3000 # vite
+  #       6969 # slimevr discovery
+  #       9000 # slimevr osc
+  #       9001 # slimevr osc
+  #       25565 # minecraft server
+  #       8100 # mc server bluemap
+  #       #59100 # audiorelay
+  #       #59200 # audiorelay discovery
+  #     ];
+  #   };
+  # };
+  # Or disable the firewall altogether.
+  networking.firewall.enable = false;
 
   nix.settings = {
     substituters = [
