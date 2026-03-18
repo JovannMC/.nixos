@@ -202,6 +202,8 @@
       docker-compose
       p7zip # for unity hub, actually install support lmao
       exiftool
+      libimobiledevice
+      ifuse
 
       # chat
       vesktop
@@ -585,6 +587,11 @@
        EVDEV_REL_WHEEL_HI_RES=n:0:0:0
        EVDEV_REL_HWHEEL_HI_RES=n:0:0:0
     '';
+
+    usbmuxd = {
+      enable = true;
+      package = pkgs.usbmuxd2;
+    };
 
     cloudflare-warp = {
       enable = true;
