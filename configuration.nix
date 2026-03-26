@@ -597,6 +597,19 @@
       enable = true;
       openFirewall = true;
     };
+
+    cloudflared = {
+      enable = true;
+      tunnels = {
+        "79bcf313-5f62-4996-9a29-d36a70461da1" = {
+          credentialsFile = "/home/jovannmc/.cloudflared/79bcf313-5f62-4996-9a29-d36a70461da1.json"; # this needs to not be hardcoded lol
+          default = "http_status:404";
+          ingress = {
+            "vertd.jovann.me" = "http://localhost:24153";
+          };
+        };
+      };
+    };
   };
 
   systemd.packages = with pkgs; [ arrpc ];
