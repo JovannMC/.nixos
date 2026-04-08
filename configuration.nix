@@ -236,7 +236,9 @@
       android-tools
 
       # other
-      brave # helium for nix when
+      #brave
+      inputs.helium.packages.${system}.default
+      inputs.orion-browser.packages.${pkgs.system}.default
       vlc
       filezilla
       spotify
