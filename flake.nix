@@ -22,6 +22,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     orion-browser.url = "github:dokokitsune/orion-browser-flake";
+    ngi.url = "github:ngi-nix/ngipkgs";
   };
 
   outputs =
@@ -39,6 +40,7 @@
       minesddm,
       helium,
       orion-browser,
+      ngi,
     }@inputs:
     {
       nixosConfigurations = {
@@ -49,7 +51,10 @@
             (
               { pkgs, ... }:
               {
-                nixpkgs.overlays = [ nix-cachyos-kernel.overlay ];
+                nixpkgs.overlays = [
+                  nix-cachyos-kernel.overlay
+                  ngi.overlays.default
+                ];
                 boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts-lto;
               }
             )
@@ -58,6 +63,7 @@
             home-manager.nixosModules.home-manager
             spicetify-nix.nixosModules.default
             nix-flatpak.nixosModules.nix-flatpak
+            "${ngi}/projects/Servo/module.nix"
             minecraft-plymouth.nixosModules.default
             minegrub-theme.nixosModules.default
           ];

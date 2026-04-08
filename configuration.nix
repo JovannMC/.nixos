@@ -201,6 +201,8 @@
       xclicker
       yt-dlp
       spotdl
+      #wineWowPackages.stable
+      #ineWowPackages.waylandFull
       wineWow64Packages.stable
       wineWow64Packages.waylandFull
       winetricks
@@ -237,6 +239,8 @@
 
       # other
       #brave
+      # TODO: test ALL!!! the browser engines because why tf not, funny screenshot
+      # prob need a windows vm for some - https://en.wikipedia.org/wiki/Browser_engine
       inputs.helium.packages.${system}.default
       inputs.orion-browser.packages.${pkgs.system}.default
       vlc
@@ -328,6 +332,8 @@
     noisetorch.enable = true;
     ssh.startAgent = true;
     openvpn3.enable = true;
+    ladybird.enable = true;
+    servo.enable = true;
 
     firefox = {
       enable = true;
