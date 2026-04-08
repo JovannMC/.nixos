@@ -139,13 +139,18 @@
       NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
       ADB_LIBUSB = "0"; # adb broken - see https://github.com/nmeum/android-tools/issues/153
+
+      # nvidia fixes?
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      GBM_BACKEND = "nvidia-drm";
+      # __EGL_VENDOR_LIBRARY_FILENAMES = "/run/current-system/sw/share/glvnd/egl_vendor.d/10_nvidia.json";
     };
 
     etc."libinput/local-overrides.quirks".text = ''
-      [Attack Shark X6 scroll fix]
-      MatchName=*Attack*Shark*
+      [Beken 2.4G Wireless Device (Attack Shark X6) scroll fix]
+      MatchName=Beken 2.4G Wireless Device*
       MatchUdevType=mouse
-      AttrEventCodeDisable=REL_WHEEL_HI_RES;REL_HWHEEL_HI_RES
+      AttrEventCode=-REL_WHEEL_HI_RES;-REL_HWHEEL_HI_RES;
     '';
 
     # List packages installed in system profile. To search, run:
@@ -223,6 +228,7 @@
       sidequest
       inputs.parsecgaming.packages.x86_64-linux.parsecgaming
       slimevr
+      dolphin-emu
 
       # networking
       qbittorrent
@@ -303,6 +309,14 @@
       #     })
       # )
       discord-canary
+    ];
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal
     ];
   };
 
@@ -444,6 +458,8 @@
     wireshark.enable = true;
     direnv.enable = true;
     virt-manager.enable = true;
+
+    zoom-us.enable = true;
   };
 
   # List services that you want to enable:
@@ -579,15 +595,6 @@
       ];
     };
 
-    udev.extraHwdb = ''
-      # disable hi-res scrolling for Attack Shark X6
-      # omfg this issue was driving me crazy cause it only happened on linux, and not my other machines
-      # nvm its not fixed its literally just from replugging the usb, it eventually comes back :(
-      evdev:input:b0003v1d57pfa60*
-       EVDEV_REL_WHEEL_HI_RES=n:0:0:0
-       EVDEV_REL_HWHEEL_HI_RES=n:0:0:0
-    '';
-
     usbmuxd = {
       enable = true;
       package = pkgs.usbmuxd2;
@@ -614,48 +621,6 @@
 
   systemd.packages = with pkgs; [ arrpc ];
 
-  # networking = {
-  #   firewall = {
-  #     # Open ports in the firewall.
-  #     allowedTCPPorts = [
-  #       3389 # rdp
-  #       5900 # vnc
-  #       7100 # uxplay
-  #       7000 # uxplay
-  #       7001 # uxplay
-  #       9999 # localsend
-  #       5173 # vite
-  #       4173 # vite
-  #       3000 # vite
-  #       6969 # slimevr discovery
-  #       9000 # slimevr osc
-  #       9001 # slimevr osc
-  #       25565 # minecraft server
-  #       8100 # mc server bluemap
-  #       #59100 # audiorelay
-  #     ];
-  #     allowedUDPPorts = [
-  #       3389 # rdp
-  #       5900 # vnc
-  #       5353 # uxplay
-  #       7011 # uxplay
-  #       6001 # uxplay
-  #       6000 # uxplay
-  #       9999 # localsend
-  #       5173 # vite
-  #       4173 # vite
-  #       3000 # vite
-  #       6969 # slimevr discovery
-  #       9000 # slimevr osc
-  #       9001 # slimevr osc
-  #       25565 # minecraft server
-  #       8100 # mc server bluemap
-  #       #59100 # audiorelay
-  #       #59200 # audiorelay discovery
-  #     ];
-  #   };
-  # };
-  # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
   nix.settings = {
