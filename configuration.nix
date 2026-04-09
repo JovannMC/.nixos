@@ -192,7 +192,7 @@
       scrcpy
       uxplay
       zsh-you-should-use
-      (pkgs.ffmpeg-full.override {
+      (ffmpeg-full.override {
         withOpengl = true;
         withRtmp = true;
       })
@@ -282,6 +282,24 @@
       persepolis
       netpeek
       tigervnc
+      (symlinkJoin {
+        name = "spectacle";
+        paths = [
+          (kdePackages.spectacle.override {
+            tesseractLanguages = [ "eng" ];
+          })
+        ];
+        buildInputs = [ makeWrapper ];
+        postBuild = ''
+          # "QT_QUICK_BACKEND" fixes EGL context errors on NVIDIA wayland (crashing on having heavy GPU apps open)
+          # "LIBVA_DRIVER_NAME" fixes VA-API errors on NVIDIA (video recording blank)
+          # "LD_LIBRARY_PATH" with tesseract fixes OCR
+          wrapProgram $out/bin/spectacle \
+            --set QT_QUICK_BACKEND software \
+            --set LIBVA_DRIVER_NAME none \
+            --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ tesseract ]} \
+        '';
+      })
 
       # currently broken, discord_krisp moved?
       # -- FileNotFoundError: [Errno 2] No such file or directory: '/home/jovannmc/.config/discordcanary/0.0.871/modules/discord_krisp/discord_krisp.node'
