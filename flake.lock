@@ -347,15 +347,15 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1775270414,
-        "narHash": "sha256-hsPjh2dC4j5fJCf0caGUa5/xvI+TttnASrwpynQpYks=",
-        "owner": "schembriaiden",
+        "lastModified": 1775713205,
+        "narHash": "sha256-q1MSw1+QUcmRzJhNc8tFDAI8Dm6ITMYX0+v31xhOFZs=",
+        "owner": "jovannmc",
         "repo": "helium-browser-nix-flake",
-        "rev": "55e5833c8c5f664b9d830e3ccd3ca56f7d7e2701",
+        "rev": "b8881855add3f75b51195d296a433ff0dc43a823",
         "type": "github"
       },
       "original": {
-        "owner": "schembriaiden",
+        "owner": "jovannmc",
         "repo": "helium-browser-nix-flake",
         "type": "github"
       }

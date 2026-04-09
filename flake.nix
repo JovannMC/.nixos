@@ -18,7 +18,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     helium = {
-      url = "github:schembriaiden/helium-browser-nix-flake";
+      url = "github:jovannmc/helium-browser-nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     orion-browser.url = "github:dokokitsune/orion-browser-flake";
