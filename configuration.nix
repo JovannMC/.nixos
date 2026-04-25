@@ -211,6 +211,7 @@
       exiftool
       libimobiledevice
       ifuse
+      unrar
 
       # chat
       vesktop
@@ -232,6 +233,7 @@
       slimevr
       dolphin-emu
       osu-lazer-bin
+      ryubing
 
       # networking
       qbittorrent
