@@ -231,6 +231,7 @@
       inputs.parsecgaming.packages.x86_64-linux.parsecgaming
       slimevr
       dolphin-emu
+      osu-lazer-bin
 
       # networking
       qbittorrent
@@ -456,6 +457,7 @@
         pkgs.steam-play-none
       ];
     };
+    joycond-cemuhook.enable = true;
 
     obs-studio = {
       enable = true;
@@ -601,6 +603,7 @@
       capSysAdmin = true;
       openFirewall = true;
     };
+    joycond.enable = true;
     # foldingathome = {
     #   enable = true;
     #   team = 1066441;
