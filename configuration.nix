@@ -146,13 +146,14 @@
       # __EGL_VENDOR_LIBRARY_FILENAMES = "/run/current-system/sw/share/glvnd/egl_vendor.d/10_nvidia.json";
     };
 
-    etc."libinput/local-overrides.quirks".text = ''
-      [Beken 2.4G Wireless Device (Attack Shark X6) scroll fix]
-      MatchName=Beken 2.4G Wireless Device*
-      MatchUdevType=mouse
-      AttrEventCode=-REL_WHEEL_HI_RES;-REL_HWHEEL_HI_RES;
-    '';
-
+    etc."libinput/local-overrides.quirks" = {
+      # please work
+      text = ''
+        [KillHighResScroll]
+        MatchName=*
+        AttrEventCode=-REL_WHEEL_HI_RES;-REL_HWHEEL_HI_RES;
+      '';
+    };
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = with pkgs; [
@@ -258,7 +259,7 @@
       # utilities
       gparted
       # gwe # no support for wayland
-      tuxclocker
+      # tuxclocker # broken - see https://github.com/NixOS/nixpkgs/issues/504637 & https://github.com/Lurkki14/tuxclocker/pull/107
       nvidia-vaapi-driver
       recoll
       pinta
@@ -281,7 +282,7 @@
       losslesscut-bin
       qdirstat
       qpwgraph
-      lutris
+      #lutris # broken due to openldap, don't need anyways - see https://github.com/NixOS/nixpkgs/issues/513245
       persepolis
       netpeek
       tigervnc
@@ -295,11 +296,9 @@
         buildInputs = [ makeWrapper ];
         postBuild = ''
           # "QT_QUICK_BACKEND" fixes EGL context errors on NVIDIA wayland (crashing on having heavy GPU apps open)
-          # "LIBVA_DRIVER_NAME" fixes VA-API errors on NVIDIA (video recording blank)
           # "LD_LIBRARY_PATH" with tesseract fixes OCR
           wrapProgram $out/bin/spectacle \
             --set QT_QUICK_BACKEND software \
-            --set LIBVA_DRIVER_NAME none \
             --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ tesseract ]} \
         '';
       })
@@ -555,7 +554,6 @@
     #
     wivrn = {
       enable = true;
-      defaultRuntime = true;
       openFirewall = true;
       autoStart = true;
       # thank you LVRA discord for helping me fix my weird issue lmfao
