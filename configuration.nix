@@ -126,7 +126,10 @@
 
   nixpkgs.config = {
     allowUnfree = true;
-    permittedInsecurePackages = [ "olm-3.2.16" ];
+    permittedInsecurePackages = [
+      "olm-3.2.16"
+      "openssl-1.1.1w"
+    ];
   };
 
   environment = {
@@ -238,11 +241,11 @@
 
       # networking
       qbittorrent
-      protonvpn-gui
+      proton-vpn
       android-tools
 
       # other
-      #brave
+      brave
       # TODO: test ALL!!! the browser engines because why tf not, funny screenshot
       # prob need a windows vm for some - https://en.wikipedia.org/wiki/Browser_engine
       inputs.helium.packages.${system}.default
@@ -374,8 +377,10 @@
         update-flake = "sudo nixos-rebuild switch --flake .#mayabox";
         upgrade-flake = "nix flake update && sudo nixos-rebuild switch --flake .#mayabox";
         upgrade-nixpkgs = "nix flake update nixpkgs && sudo nixos-rebuild switch --flake .#mayabox";
+        upgrade-all-but-kernel = "nix flake update nixpkgs nixpkgs-xr home-manager spicetify-nix parsecgaming nix-flatpak minecraft-plymouth minegrub-theme minseddm helium orion-browser ngi && sudo nixos-rebuild switch --flake .#mayabox";
         upgrade-kernel = "nix flake update nix-cachyos-kernel && sudo nixos-rebuild switch --flake .#mayabox";
       };
+      # 235 work, #236 broke, #237 new(?)
 
       ohMyZsh = {
         enable = true;
@@ -420,7 +425,6 @@
           history
           volumePercentage
           beautifulLyrics
-          oneko
         ];
         enabledCustomApps = with spicePkgs.apps; [
           newReleases
@@ -554,11 +558,13 @@
     #
     wivrn = {
       enable = true;
-      openFirewall = true;
-      autoStart = true;
+      package = pkgs.wivrn.override { cudaSupport = true; };
+
+      # openFirewall = true;
+      # autoStart = true;
       # thank you LVRA discord for helping me fix my weird issue lmfao
       # "it could be that wivrn is writing an older path for oc and messing it up"
-      extraServerFlags = [ "--no-manage-active-runtime" ];
+      # extraServerFlags = [ "--no-manage-active-runtime" ];
 
       #       package = pkgs.wivrn.overrideAttrs (old: rec {
       #   version = "1e488a8a9c4be6fefae1fc63d9f23f65ebf53a06";
