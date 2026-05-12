@@ -68,6 +68,18 @@
             minegrub-theme.nixosModules.default
           ];
         };
+        mayabook = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/mayabook/configuration.nix
+            home-manager.nixosModules.home-manager
+            spicetify-nix.nixosModules.default
+            nix-flatpak.nixosModules.nix-flatpak
+            minecraft-plymouth.nixosModules.default
+            minegrub-theme.nixosModules.default
+          ];
+        };
       };
     };
 }

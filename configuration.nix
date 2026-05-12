@@ -17,18 +17,7 @@
     ];
 
     optimise.automatic = true;
-
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
   };
-
-  imports = [
-    ./home.nix
-    ./apps/keyboard-knob-remap.nix
-  ];
 
   boot = {
     loader = {
@@ -38,7 +27,7 @@
         efiSupport = true;
         minegrub-theme = {
           enable = true;
-          splash = "100% Flakes!";
+          splash = "100% Orange Juice!";
           background = "background_options/1.8  - [Classic Minecraft].png";
           boot-options-count = 2;
         };
@@ -64,7 +53,6 @@
   security.polkit.enable = true;
 
   networking = {
-    hostName = "mayabox";
     # Pick only one of the below networking options.
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
@@ -117,13 +105,6 @@
     #];
   };
 
-  virtualisation = {
-    libvirtd.enable = true;
-    spiceUSBRedirection.enable = true;
-    waydroid.enable = true;
-    docker.enable = true;
-  };
-
   nixpkgs.config = {
     allowUnfree = true;
     permittedInsecurePackages = [
@@ -142,21 +123,8 @@
       NIXOS_OZONE_WL = "1"; # force electron apps to run on wayland
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
       ADB_LIBUSB = "0"; # adb broken - see https://github.com/nmeum/android-tools/issues/153
-
-      # nvidia fixes?
-      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-      GBM_BACKEND = "nvidia-drm";
-      # __EGL_VENDOR_LIBRARY_FILENAMES = "/run/current-system/sw/share/glvnd/egl_vendor.d/10_nvidia.json";
     };
 
-    etc."libinput/local-overrides.quirks" = {
-      # please work
-      text = ''
-        [KillHighResScroll]
-        MatchName=*
-        AttrEventCode=-REL_WHEEL_HI_RES;-REL_HWHEEL_HI_RES;
-      '';
-    };
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = with pkgs; [
@@ -173,36 +141,25 @@
       jdk17
 
       # editors
-      micro
       vscode
       audacity
-      blender
-      libreoffice
-      alcom
-      unityhub
-      sourcegit
       github-desktop
-      inkscape
 
       # command line utilities
       wget
       git
-      tree
       nixfmt
       btop
       fastfetch
       hyfetch
       pciutils # gpu support for hyfetch.. even though it is in hyfetch's nix expression
       scrcpy
-      uxplay
       zsh-you-should-use
       (ffmpeg-full.override {
         withOpengl = true;
         withRtmp = true;
       })
-      playerctl
       busybox
-      xclicker
       yt-dlp
       spotdl
       #wineWowPackages.stable
@@ -210,34 +167,16 @@
       wineWow64Packages.stable
       wineWow64Packages.waylandFull
       winetricks
-      docker-compose
       p7zip # for unity hub, actually install support lmao
       exiftool
-      libimobiledevice
-      ifuse
       unrar
 
       # chat
       vesktop
       arrpc
-      nheko
-      #kdePackages.neochat
       telegram-desktop
-      thunderbird
       signal-desktop
       slack
-
-      # games
-      prismlauncher
-      wayvr
-      opencomposite
-      bs-manager
-      sidequest
-      inputs.parsecgaming.packages.x86_64-linux.parsecgaming
-      slimevr
-      dolphin-emu
-      osu-lazer-bin
-      ryubing
 
       # networking
       qbittorrent
@@ -245,98 +184,36 @@
       android-tools
 
       # other
-      brave
-      # TODO: test ALL!!! the browser engines because why tf not, funny screenshot
-      # prob need a windows vm for some - https://en.wikipedia.org/wiki/Browser_engine
       inputs.helium.packages.${system}.default
-      inputs.orion-browser.packages.${pkgs.system}.default
       vlc
       filezilla
       spotify
-      fahclient
       (pkgs.callPackage ./apps/davinci-resolve-paid.nix { })
-      oneko
       nixd
       firefoxpwa
 
       # utilities
       gparted
-      # gwe # no support for wayland
-      # tuxclocker # broken - see https://github.com/NixOS/nixpkgs/issues/504637 & https://github.com/Lurkki14/tuxclocker/pull/107
-      nvidia-vaapi-driver
       recoll
       pinta
       qdirstat
       kdePackages.kalk
       kdePackages.dragon
-      kdePackages.krdc
-      kdePackages.krfb
-      kdePackages.isoimagewriter
+      kdePackages.gwenview
       kdePackages.kimageformats
+      (kdePackages.spectacle.override {
+        tesseractLanguages = [ "eng" ];
+      })
       remmina
       localsend
       moonlight-qt
       yubioath-flutter
       handbrake
-      #alsa-utils
-      #pkgs.audiorelay
-      sonobus
       easyeffects
       losslesscut-bin
-      qdirstat
       qpwgraph
-      #lutris # broken due to openldap, don't need anyways - see https://github.com/NixOS/nixpkgs/issues/513245
-      persepolis
       netpeek
       tigervnc
-      (symlinkJoin {
-        name = "spectacle";
-        paths = [
-          (kdePackages.spectacle.override {
-            tesseractLanguages = [ "eng" ];
-          })
-        ];
-        buildInputs = [ makeWrapper ];
-        postBuild = ''
-          # "QT_QUICK_BACKEND" fixes EGL context errors on NVIDIA wayland (crashing on having heavy GPU apps open)
-          # "LD_LIBRARY_PATH" with tesseract fixes OCR
-          wrapProgram $out/bin/spectacle \
-            --set QT_QUICK_BACKEND software \
-            --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ tesseract ]} \
-        '';
-      })
-
-      # currently broken, discord_krisp moved?
-      # -- FileNotFoundError: [Errno 2] No such file or directory: '/home/jovannmc/.config/discordcanary/0.0.871/modules/discord_krisp/discord_krisp.node'
-      # discord lol
-      # (
-      #   let
-      #     patch-krisp = writers.writePython3 "krisp-patcher" {
-      #       libraries = with python3Packages; [
-      #         capstone
-      #         pyelftools
-      #       ];
-      #       flakeIgnore = [
-      #         "E501"
-      #         "F403"
-      #         "F405"
-      #       ];
-      #     } (builtins.readFile ./apps/krisp-patcher.py); # thank you https://git.gay/amida/krisp-patcher/ and AnnoyingRains lmao
-      #     binaryName = "DiscordCanary";
-      #     node_module = "\\$HOME/.config/discordcanary/${discord-canary.version}/modules/discord_krisp/discord_krisp.node";
-      #   in
-      #   (discord-canary.override {
-      #     withVencord = true;
-      #     withOpenASAR = true;
-      #   }).overrideAttrs
-      #     (previousAttrs: {
-      #       postInstall = previousAttrs.postInstall + ''
-      #         wrapProgramShell $out/opt/${binaryName}/${binaryName} \
-      #         --run "${patch-krisp} ${node_module}"
-      #       '';
-      #       passthru = removeAttrs previousAttrs.passthru [ "updateScript" ];
-      #     })
-      # )
       discord-canary
     ];
   };
@@ -355,8 +232,13 @@
     noisetorch.enable = true;
     ssh.startAgent = true;
     openvpn3.enable = true;
-    ladybird.enable = true;
-    servo.enable = true;
+
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--delete-older-than 30d --keep";
+      flake = "/home/jovannmc/.nixos"; # sets NH_OS_FLAKE variable for you
+    };
 
     firefox = {
       enable = true;
@@ -380,7 +262,6 @@
         upgrade-all-but-kernel = "nix flake update nixpkgs nixpkgs-xr home-manager spicetify-nix parsecgaming nix-flatpak minecraft-plymouth minegrub-theme minseddm helium orion-browser ngi && sudo nixos-rebuild switch --flake .#mayabox";
         upgrade-kernel = "nix flake update nix-cachyos-kernel && sudo nixos-rebuild switch --flake .#mayabox";
       };
-      # 235 work, #236 broke, #237 new(?)
 
       ohMyZsh = {
         enable = true;
@@ -462,7 +343,6 @@
         pkgs.steam-play-none
       ];
     };
-    joycond-cemuhook.enable = true;
 
     obs-studio = {
       enable = true;
@@ -487,10 +367,8 @@
     };
 
     gnome-disks.enable = true;
-    kdeconnect.enable = true;
     wireshark.enable = true;
     direnv.enable = true;
-    virt-manager.enable = true;
 
     zoom-us.enable = true;
   };
@@ -514,14 +392,6 @@
       defaultSession = "plasma";
       autoLogin.enable = true;
       autoLogin.user = "jovannmc";
-    };
-
-    # Enable CUPS to print documents.
-    printing = {
-      enable = true;
-      drivers = [
-        pkgs.hplipWithPlugin
-      ];
     };
 
     avahi = {
@@ -556,53 +426,6 @@
     #
     # user stuff
     #
-    wivrn = {
-      enable = true;
-      package = pkgs.wivrn.override { cudaSupport = true; };
-
-      # openFirewall = true;
-      # autoStart = true;
-      # thank you LVRA discord for helping me fix my weird issue lmfao
-      # "it could be that wivrn is writing an older path for oc and messing it up"
-      # extraServerFlags = [ "--no-manage-active-runtime" ];
-
-      #       package = pkgs.wivrn.overrideAttrs (old: rec {
-      #   version = "1e488a8a9c4be6fefae1fc63d9f23f65ebf53a06";
-      #   src = pkgs.fetchFromGitHub {
-      #     owner = "WiVRn";
-      #     repo = "WiVRn";
-      #     rev = version;
-      #     hash = "sha256-acsxbb3XKzpCkZUtkL3jfpk7qoBc7LU+VtQ7bA6JMCc=";
-      #   };
-      # });
-
-      # config = {
-      #   enable = true;
-      #   json = {
-      #     scale = 0.5;
-      #     # 100 Mb/s
-      #     bitrate = 100000000;
-      #     encoders = [
-      #       {
-      #         encoder = "nvenc";
-      #         codec = "h265";
-      #         width = 0.5;
-      #         height = 1.0;
-      #         offset_x = 0.0;
-      #         offset_y = 0.0;
-      #       }
-      #       {
-      #         encoder = "nvenc";
-      #         codec = "h265";
-      #         width = 0.5;
-      #         height = 1.0;
-      #         offset_x = 0.5;
-      #         offset_y = 0.0;
-      #       }
-      #     ];
-      #   };
-      # };
-    };
     sunshine = {
       enable = true;
       autoStart = true;
@@ -610,11 +433,7 @@
       openFirewall = true;
     };
     joycond.enable = true;
-    # foldingathome = {
-    #   enable = true;
-    #   team = 1066441;
-    #   user = "JovannMC";
-    # };
+
     mullvad-vpn = {
       enable = true;
       package = pkgs.mullvad-vpn;
@@ -638,19 +457,6 @@
     cloudflare-warp = {
       enable = true;
       openFirewall = true;
-    };
-
-    cloudflared = {
-      enable = true;
-      tunnels = {
-        "79bcf313-5f62-4996-9a29-d36a70461da1" = {
-          credentialsFile = "/home/jovannmc/.cloudflared/79bcf313-5f62-4996-9a29-d36a70461da1.json"; # this needs to not be hardcoded lol
-          default = "http_status:404";
-          ingress = {
-            "vertd.jovann.me" = "http://localhost:24153";
-          };
-        };
-      };
     };
   };
 
