@@ -11,6 +11,7 @@ let
       stdenv,
       lib,
       fetchFromGitHub,
+      fetchpatch,
       buildLinux,
       ...
     }:
@@ -18,15 +19,15 @@ let
       inherit stdenv lib;
 
       pname = "linux-asahi";
-      version = "6.17.7";
+      version = "6.19.14";
       modDirVersion = version;
-      extraMeta.branch = "6.17";
+      extraMeta.branch = "6.19";
 
       src = fetchFromGitHub {
         owner = "AsahiLinux";
         repo = "linux";
-        tag = "asahi-6.17.7-2";
-        hash = "sha256-wyuHcp9rEpOtNb8aRPkfX57XdcmpitklM4oew/YMRio=";
+        tag = "asahi-6.19.14-2";
+        hash = "sha256-N2ZIiuW6Y61m0E2JWy/Rc71iFFNspdqityxbxG0OJhs=";
       };
 
       kernelPatches = [

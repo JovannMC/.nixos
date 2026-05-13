@@ -10,10 +10,10 @@
     # tracking: https://pagure.io/fedora-asahi/uboot-tools/commits/main
     owner = "AsahiLinux";
     repo = "u-boot";
-    rev = "asahi-v2025.07-1";
-    hash = "sha256-WGpMd3ub+m0xWevPreYrLWpoQSz9sr1YmeOiU7kgPGs=";
+    rev = "asahi-v2025.10-2";
+    hash = "sha256-zZt/4ptKymH9+dsBJXOA4jYJx+KvvUcMtuHOtedUTY4=";
   };
-  version = "2025.07-1-asahi";
+  version = "2025.10-1-asahi";
 
   defconfig = "apple_m1_defconfig";
   extraMeta.platforms = [ "aarch64-linux" ];
