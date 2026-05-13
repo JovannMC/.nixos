@@ -26,10 +26,18 @@
   # Implicitly enables IWD and disables wpa_supplicant
   networking.networkmanager.wifi.backend = "iwd";
 
-  hardware.graphics.enable32Bit = false;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = false;
+  };
 
-  # Specify path to peripheral firmware files.
-  hardware.asahi.peripheralFirmwareDirectory = ./firmware;
+  hardware.asahi = {
+    enable = true;
+    useExperimentalGPUDriver = true;
+    setupAsahiSound = true;
+    withRust = true;
+    peripheralFirmwareDirectory = ./firmware;
+  };
   # Or disable extraction and management of them completely.
   #hardware.asahi.extractPeripheralFirmware = false;
 

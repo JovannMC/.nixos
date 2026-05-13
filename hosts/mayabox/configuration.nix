@@ -191,6 +191,14 @@
     ladybird.enable = true;
     servo.enable = true;
 
+    steam = {
+      enable = true;
+      extraCompatPackages = with pkgs; [
+        proton-ge-bin
+        proton-ge-rtsp-bin
+        pkgs.steam-play-none
+      ];
+    };
     joycond-cemuhook.enable = true;
 
     kdeconnect.enable = true;
