@@ -181,7 +181,6 @@
       vlc
       filezilla
       spotify
-      (pkgs.callPackage ./apps/davinci-resolve-paid.nix { })
       nixd
       firefoxpwa
 

@@ -125,6 +125,7 @@
       # TODO: test ALL!!! the browser engines because why tf not, funny screenshot
       # prob need a windows vm for some - https://en.wikipedia.org/wiki/Browser_engine
       inputs.orion-browser.packages.${pkgs.system}.default
+      (pkgs.callPackage ../../apps/davinci-resolve-paid.nix { })
       fahclient
 
       # utilities
