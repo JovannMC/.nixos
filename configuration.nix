@@ -328,15 +328,6 @@
       binfmt = true;
     };
 
-    steam = {
-      enable = true;
-      extraCompatPackages = with pkgs; [
-        proton-ge-bin
-        proton-ge-rtsp-bin
-        pkgs.steam-play-none
-      ];
-    };
-
     obs-studio = {
       enable = true;
 
