@@ -213,6 +213,8 @@
       ];
     };
 
+    pipewire.alsa.support32Bit = true;
+
     #
     # user stuff
     #

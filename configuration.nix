@@ -72,6 +72,7 @@
   # };
 
   hardware = {
+    graphics.enable32Bit = false;
     bluetooth = {
       enable = true; # enables support for Bluetooth
       powerOnBoot = true; # powers up the default Bluetooth controller on boot
@@ -398,7 +399,6 @@
       enable = true;
       pulse.enable = true;
       alsa.enable = true;
-      alsa.support32Bit = true;
     };
 
     resolved = {
