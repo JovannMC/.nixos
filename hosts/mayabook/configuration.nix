@@ -11,6 +11,8 @@
 
 {
   imports = [
+    ../../configuration.nix
+
     ./hardware-configuration.nix
     ./apple-silicon-support
   ];
@@ -21,22 +23,13 @@
 
   networking.hostName = "mayabook-nixos"; # Define your hostname.
 
-  # Configure network connections interactively with nmcli or nmtui.
-  networking.networkmanager.enable = true;
   # Implicitly enables IWD and disables wpa_supplicant
   networking.networkmanager.wifi.backend = "iwd";
-
-  # Set your time zone.
-  time.timeZone = "Asia/Qatar";
 
   # Specify path to peripheral firmware files.
   hardware.asahi.peripheralFirmwareDirectory = ./firmware;
   # Or disable extraction and management of them completely.
   #hardware.asahi.extractPeripheralFirmware = false;
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.desktopManager.plasma6.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

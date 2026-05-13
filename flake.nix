@@ -77,7 +77,6 @@
             spicetify-nix.nixosModules.default
             nix-flatpak.nixosModules.nix-flatpak
             minecraft-plymouth.nixosModules.default
-            minegrub-theme.nixosModules.default
           ];
         };
       };

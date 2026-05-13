@@ -11,33 +11,26 @@
 
 {
   nix = {
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      substituters = [
+        "https://cache.nixos-cuda.org"
+        "https://attic.xuyh0120.win/lantian"
+      ];
+      trusted-public-keys = [
+        "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+        "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+      ];
+    };
 
     optimise.automatic = true;
   };
 
   boot = {
-    loader = {
-      grub = {
-        enable = true;
-        devices = [ "nodev" ];
-        efiSupport = true;
-        minegrub-theme = {
-          enable = true;
-          splash = "100% Orange Juice!";
-          background = "background_options/1.8  - [Classic Minecraft].png";
-          boot-options-count = 2;
-        };
-      };
-
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-    };
+    loader.efi.efiSysMountPoint = "/boot";
 
     # for OBS virtual camera
     extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
@@ -256,10 +249,10 @@
       shellAliases = {
         ll = "ls -l";
         update = "sudo nixos-rebuild switch";
-        update-flake = "sudo nixos-rebuild switch --flake .#mayabox";
-        upgrade-flake = "nix flake update && sudo nixos-rebuild switch --flake .#mayabox";
+        update-flake = "sudo nixos-rebuild switch";
+        upgrade-flake = "nix flake update && sudo nixos-rebuild switch";
         upgrade-nixpkgs = "nix flake update nixpkgs && sudo nixos-rebuild switch --flake .#mayabox";
-        upgrade-all-but-kernel = "nix flake update nixpkgs nixpkgs-xr home-manager spicetify-nix parsecgaming nix-flatpak minecraft-plymouth minegrub-theme minseddm helium orion-browser ngi && sudo nixos-rebuild switch --flake .#mayabox";
+        upgrade-all-but-kernel = "nix flake update nixpkgs nixpkgs-xr home-manager spicetify-nix parsecgaming nix-flatpak minecraft-plymouth minegrub-theme minseddm helium orion-browser ngi && sudo nixos-rebuild switch";
         upgrade-kernel = "nix flake update nix-cachyos-kernel && sudo nixos-rebuild switch --flake .#mayabox";
       };
 
@@ -463,40 +456,4 @@
   systemd.packages = with pkgs; [ arrpc ];
 
   networking.firewall.enable = false;
-
-  nix.settings = {
-    substituters = [
-      "https://cache.nixos-cuda.org"
-      "https://attic.xuyh0120.win/lantian"
-    ];
-    trusted-public-keys = [
-      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
-      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-    ];
-  };
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "25.05"; # Did you read the comment?
-
 }

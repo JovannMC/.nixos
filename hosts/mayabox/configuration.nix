@@ -16,6 +16,24 @@
 
   networking.hostName = "mayabox";
 
+  boot = {
+    loader = {
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+        minegrub-theme = {
+          enable = true;
+          splash = "100% Orange Juice!";
+          background = "background_options/1.8  - [Classic Minecraft].png";
+          boot-options-count = 2;
+        };
+      };
+
+      efi.canTouchEfiVariables = true;
+    };
+  };
+
   hardware = {
     graphics = {
       enable = true;
@@ -74,18 +92,6 @@
     };
 
     systemPackages = with pkgs; [
-      # programming
-      python3
-      nodejs
-      corepack
-      bun
-      gnumake
-      gcc
-      undollar
-      rust-analyzer
-      jetbrains-toolbox
-      jdk17
-
       # editors
       micro
       blender
@@ -98,11 +104,6 @@
       # command line utilities
       uxplay
       playerctl
-      #wineWowPackages.stable
-      #wineWowPackages.waylandFull
-      wineWow64Packages.stable
-      wineWow64Packages.waylandFull
-      winetricks
       docker-compose
       libimobiledevice
       ifuse
@@ -190,14 +191,6 @@
     ladybird.enable = true;
     servo.enable = true;
 
-    steam = {
-      enable = true;
-      extraCompatPackages = with pkgs; [
-        proton-ge-bin
-        proton-ge-rtsp-bin
-        pkgs.steam-play-none
-      ];
-    };
     joycond-cemuhook.enable = true;
 
     kdeconnect.enable = true;
@@ -291,4 +284,28 @@
     };
   };
   swapDevices = [ { device = "/dev/disk/by-uuid/6766bdd8-c44c-4512-980c-c43087f8a98a"; } ];
+
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  # system.copySystemConfiguration = true;
+
+  # This option defines the first version of NixOS you have installed on this particular machine,
+  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+  #
+  # Most users should NEVER change this value after the initial install, for any reason,
+  # even if you've upgraded your system to a new NixOS release.
+  #
+  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+  # to actually do that.
+  #
+  # This value being lower than the current NixOS release does NOT mean your system is
+  # out of date, out of support, or vulnerable.
+  #
+  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+  # and migrated your data accordingly.
+  #
+  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+  system.stateVersion = "25.05"; # Did you read the comment?
 }
