@@ -283,7 +283,14 @@
 
     spicetify =
       let
-        spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+        baseSpicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+        spicePkgs = baseSpicePkgs // {
+          themes = baseSpicePkgs.themes // {
+            catppuccin = baseSpicePkgs.themes.catppuccin.overrideAttrs (old: let oldMeta = old.meta or {}; in {
+              meta = oldMeta // { platforms = pkgs.lib.platforms.all; };
+            });
+          };
+        };
       in
       {
         enable = true;
