@@ -33,9 +33,7 @@
 
   hardware.asahi = {
     enable = true;
-    useExperimentalGPUDriver = true;
     setupAsahiSound = true;
-    withRust = true;
     peripheralFirmwareDirectory = ./firmware;
   };
   # Or disable extraction and management of them completely.
