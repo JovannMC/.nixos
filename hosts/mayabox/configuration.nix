@@ -104,6 +104,12 @@
       # command line utilities
       uxplay
       playerctl
+      #wineWowPackages.stable
+      #ineWowPackages.waylandFull
+      wineWow64Packages.stable
+      wineWow64Packages.waylandFull
+      spotdl
+      yt-dlp
       docker-compose
       libimobiledevice
       ifuse
@@ -119,6 +125,9 @@
       dolphin-emu
       osu-lazer-bin
       ryubing
+
+      # chat
+      slack
 
       # other
       brave

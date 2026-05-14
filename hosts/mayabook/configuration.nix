@@ -17,11 +17,15 @@
     ./apple-silicon-support
   ];
 
+  nixpkgs.config = {
+    allowUnsupportedSystem = true;
+  };
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
 
-  networking.hostName = "mayabook-nixos"; # Define your hostname.
+  networking.hostName = "mayabook"; # Define your hostname.
 
   # Implicitly enables IWD and disables wpa_supplicant
   networking.networkmanager.wifi.backend = "iwd";
@@ -39,6 +43,16 @@
   # Or disable extraction and management of them completely.
   #hardware.asahi.extractPeripheralFirmware = false;
 
+  hardware.apple.touchBar = {
+    enable = true;
+    package = pkgs.tiny-dfr;
+    settings = {
+      MediaLayerDefault = true;
+      ShowButtonOutlines = false;
+      EnablePixelShift = true;
+      DoublePressSwitchLayers = 200; # ms
+    };
+  };
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.

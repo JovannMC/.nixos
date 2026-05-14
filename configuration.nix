@@ -153,12 +153,6 @@
         withRtmp = true;
       })
       busybox
-      yt-dlp
-      spotdl
-      #wineWowPackages.stable
-      #ineWowPackages.waylandFull
-      wineWow64Packages.stable
-      wineWow64Packages.waylandFull
       winetricks
       p7zip # for unity hub, actually install support lmao
       exiftool
@@ -169,7 +163,6 @@
       arrpc
       telegram-desktop
       signal-desktop
-      slack
 
       # networking
       qbittorrent
@@ -283,14 +276,7 @@
 
     spicetify =
       let
-        baseSpicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-        spicePkgs = baseSpicePkgs // {
-          themes = baseSpicePkgs.themes // {
-            catppuccin = baseSpicePkgs.themes.catppuccin.overrideAttrs (old: let oldMeta = old.meta or {}; in {
-              meta = oldMeta // { platforms = pkgs.lib.platforms.all; };
-            });
-          };
-        };
+        spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
       in
       {
         enable = true;
@@ -352,7 +338,7 @@
         obs-multi-rtmp
         obs-media-controls
         obs-vkcapture
-        waveform
+        #waveform
       ];
     };
 
