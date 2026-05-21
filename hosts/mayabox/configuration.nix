@@ -264,6 +264,12 @@
     #   user = "JovannMC";
     # };
 
+    flatpak = {
+      packages = [
+        "org.vinegarhq.Sober"
+      ];
+    };
+
     cloudflared = {
       enable = true;
       tunnels = {

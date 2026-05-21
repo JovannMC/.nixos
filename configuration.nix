@@ -418,12 +418,7 @@
     tailscale.enable = true;
     # zerotierone.enable = true;
     #logmein-hamachi.enable = true;
-    flatpak = {
-      enable = true;
-      packages = [
-        "org.vinegarhq.Sober"
-      ];
-    };
+    flatpak.enable = true;
 
     usbmuxd = {
       enable = true;

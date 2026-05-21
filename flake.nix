@@ -75,7 +75,6 @@
             ./hosts/mayabook/configuration.nix
             home-manager.nixosModules.home-manager
             spicetify-nix.nixosModules.default
-            nix-flatpak.nixosModules.nix-flatpak
             minecraft-plymouth.nixosModules.default
           ];
         };
