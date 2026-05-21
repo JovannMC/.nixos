@@ -163,6 +163,7 @@
       arrpc
       telegram-desktop
       signal-desktop
+      element-desktop
 
       # networking
       qbittorrent
