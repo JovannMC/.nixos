@@ -23,6 +23,8 @@
     };
     orion-browser.url = "github:dokokitsune/orion-browser-flake";
     ngi.url = "github:ngi-nix/ngipkgs";
+    nix-alien.url = "github:thiagokokada/nix-alien";
+    #nixgl.url = "github:nix-community/nixGL";
   };
 
   outputs =
@@ -41,6 +43,8 @@
       helium,
       orion-browser,
       ngi,
+      nix-alien,
+      #nixgl,
     }@inputs:
     {
       nixosConfigurations = {
@@ -54,6 +58,7 @@
                 nixpkgs.overlays = [
                   nix-cachyos-kernel.overlay
                   ngi.overlays.default
+                  #nixgl.overlay
                 ];
                 boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts-lto;
               }

@@ -157,6 +157,8 @@
       p7zip # for unity hub, actually install support lmao
       exiftool
       unrar
+      rclone
+      inputs.nix-alien.packages.${system}.default
 
       # chat
       vesktop
@@ -201,6 +203,7 @@
       netpeek
       tigervnc
       discord-canary
+      peazip
     ];
   };
 
@@ -218,6 +221,7 @@
     noisetorch.enable = true;
     ssh.startAgent = true;
     openvpn3.enable = true;
+    nix-ld.enable = true;
 
     nh = {
       enable = true;
@@ -257,8 +261,12 @@
           "history"
           "direnv"
           "timer"
+          "autojump"
+          "zsh-autosuggestions"
+          "zsh-syntax-highlighting"
+          "jovial"
         ];
-        theme = "robbyrussell";
+        theme = "jovial";
       };
     };
 
