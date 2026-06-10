@@ -25,6 +25,10 @@
     ngi.url = "github:ngi-nix/ngipkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
     #nixgl.url = "github:nix-community/nixGL";
+    nvidia-patch = {
+      url = "github:icewind1991/nvidia-patch-nixos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -45,6 +49,7 @@
       ngi,
       nix-alien,
       #nixgl,
+      nvidia-patch,
     }@inputs:
     {
       nixosConfigurations = {
@@ -59,6 +64,7 @@
                   nix-cachyos-kernel.overlay
                   ngi.overlays.default
                   #nixgl.overlay
+                  nvidia-patch.overlays.default
                 ];
                 boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts-lto;
               }
