@@ -9,19 +9,7 @@
 }:
 
 let
-  # find the latest patchable version here: https://github.com/icewind1991/nvidia-patch-nixos/blob/main/patch.json
-  # that list should match 1:1 with the list here: https://github.com/keylase/nvidia-patch
-  # if it doesn't... time for a fork!
-  package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-    version = "595.71.05";
-
-    # Replace with the hashes nix gives you
-    sha256_64bit = "sha256-NiA7iWC35JyKQva6H1hjzeNKBek9KyS3mK8G3YRva4I=";
-    sha256_aarch64 = lib.fakeHash;
-    openSha256 = "sha256-Lfz71QWKM6x/jD2B22SWpUi7/og30HRlXg1kL3EWzEw=";
-    settingsSha256 = "sha256-Lfz71QWKM6x/jD2B22SWpUi7/og30HRlXg1kL3EWzEw=";
-    persistencedSha256 = lib.fakeHash;
-  };
+  package = config.boot.kernelPackages.nvidiaPackages.beta;
 in
 {
   ### only enable hardware.nvidia on the default specialisation, to allow the nouveau specialisation to exist ###

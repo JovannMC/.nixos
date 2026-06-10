@@ -159,6 +159,7 @@
       unrar
       rclone
       inputs.nix-alien.packages.${system}.default
+      autojump
 
       # chat
       vesktop
@@ -249,7 +250,6 @@
         update-flake = "sudo nixos-rebuild switch";
         upgrade-flake = "nix flake update && sudo nixos-rebuild switch";
         upgrade-nixpkgs = "nix flake update nixpkgs && sudo nixos-rebuild switch --flake .#mayabox";
-        upgrade-all-but-kernel = "nix flake update nixpkgs nixpkgs-xr home-manager spicetify-nix parsecgaming nix-flatpak minecraft-plymouth minegrub-theme minseddm helium orion-browser ngi && sudo nixos-rebuild switch";
         upgrade-kernel = "nix flake update nix-cachyos-kernel && sudo nixos-rebuild switch --flake .#mayabox";
       };
 
@@ -262,14 +262,10 @@
           "direnv"
           "timer"
           "autojump"
-          "zsh-autosuggestions"
-          "zsh-syntax-highlighting"
-          "jovial"
         ];
-        theme = "jovial";
+        theme = "robbyrussell";
       };
     };
-
     git = {
       enable = true;
       lfs.enable = true;
