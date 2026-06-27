@@ -160,6 +160,7 @@
       rclone
       inputs.nix-alien.packages.${system}.default
       autojump
+      tmux
 
       # chat
       vesktop

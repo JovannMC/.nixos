@@ -101,6 +101,8 @@
       dolphin-emu
       osu-lazer-bin
       ryubing
+      mangohud
+      mangojuice
 
       # chat
       slack
@@ -186,6 +188,7 @@
       ];
     };
     joycond-cemuhook.enable = true;
+    gamemode.enable = true;
 
     kdeconnect.enable = true;
     virt-manager.enable = true;
