@@ -93,7 +93,6 @@
       # games
       prismlauncher
       wayvr
-      opencomposite
       bs-manager
       sidequest
       inputs.parsecgaming.packages.x86_64-linux.parsecgaming
@@ -119,7 +118,6 @@
       # gwe # no support for wayland
       # tuxclocker # broken - see https://github.com/NixOS/nixpkgs/issues/504637 & https://github.com/Lurkki14/tuxclocker/pull/107
       nvidia-vaapi-driver
-      #alsa-utils
       #pkgs.audiorelay
       sonobus
       #lutris # broken due to openldap, don't need anyways - see https://github.com/NixOS/nixpkgs/issues/513245

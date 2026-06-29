@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+# resolve-codec-patch — ffmpeg-based AAC→FLAC transcode helper.
+#
+# Used by aac_hybrid_shim.so as the fall-through path when an AAC file's
+# esds box uses compact (1-byte) MPEG-4 descriptor lengths or a non-LC
+# audioObjectType — cases the in-binary cave cannot safely decode in this
+# Resolve version. Produces a FLAC-audio sibling in mp4 container that
+# Resolve can decode natively (FLAC is one of the FOURCCs Resolve Linux's
+# audio dispatch DOES handle).
+#
+# Pure ffmpeg, no root, no binary patches, no /opt/resolve modifications.
+# Output cached in $AAC_REDIRECT_CACHE_DIR (defaults to
+# ${XDG_CACHE_HOME:-$HOME/.cache}/resolve-aac/) and reused across runs.
+#
+# Usage:
+#   resolve-codec-patch fix-file <source.mp4|.m4a|.mov>
+#   resolve-codec-patch sibling-path <source.mp4|.m4a|.mov>   # print the cache path; no action
+
+set -euo pipefail
+
+CMD="${1:-}"
+SRC="${2:-}"
+
+if [ -z "$CMD" ] || [ -z "$SRC" ]; then
+    cat <<EOF >&2
+usage: $0 fix-file <source>           # transcode <source> to a FLAC-audio sibling in the cache dir
+       $0 sibling-path <source>       # print the would-be sibling path, no transcode
+
+env:
+  AAC_REDIRECT_CACHE_DIR (default \${XDG_CACHE_HOME:-\$HOME/.cache}/resolve-aac)
+      where cache siblings are written; the hybrid shim reads the same env var.
+EOF
+    exit 2
+fi
+
+CACHE_DIR="${AAC_REDIRECT_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/resolve-aac}"
+
+# resolve absolute path so the hash is stable across the user's cwd
+SRC=$(readlink -f -- "$SRC" 2>/dev/null || echo "$SRC")
+[ -r "$SRC" ] || { echo "source not readable: $SRC" >&2; exit 1; }
+
+# AAC_FIX_OUT_PATH lets the in-process shim (aac_hybrid_shim.so) dictate the
+# exact sibling path it will stat() after we exit — must be honored so the
+# shim's lookup finds what we wrote. Otherwise compute a default cache path.
+if [ -n "${AAC_FIX_OUT_PATH:-}" ]; then
+    DEST="$AAC_FIX_OUT_PATH"
+else
+    # 8-hex of source absolute-path DJB2 (matches aac_hybrid_shim.so::path_hash
+    # AND pre-backfill-aac _djb2 — single source of truth across the trio).
+    # Direct CLI calls used to default to sha256 here, which created orphan
+    # cache entries the shim couldn't find on import (caught 2026-05-26).
+    HASH=$(python3 -c "
+import sys
+h = 5381
+for c in sys.argv[1].encode():
+    h = ((h << 5) + h + c) & 0xFFFFFFFFFFFFFFFF
+print(f'{h & 0xFFFFFFFF:08x}')
+" "$SRC")
+    BASE=$(basename -- "${SRC%.*}")
+    DEST="$CACHE_DIR/${HASH}-${BASE}.resolve.mp4"
+fi
+
+case "$CMD" in
+    sibling-path)
+        echo "$DEST"
+        exit 0
+        ;;
+    fix-file)
+        # already exists? respect the cache
+        if [ -f "$DEST" ] && [ -s "$DEST" ]; then
+            echo "$DEST  (cache hit)" >&2
+            exit 0
+        fi
+        mkdir -p "$CACHE_DIR"
+        command -v ffmpeg >/dev/null 2>&1 || { echo "ffmpeg not found in PATH" >&2; exit 1; }
+        # flock the destination so concurrent imports of the same file serialize
+        LOCK="$DEST.lock"
+        exec 9>"$LOCK"
+        if ! flock -w 60 9; then
+            echo "could not obtain lock $LOCK after 60s" >&2
+            exit 1
+        fi
+        # racy double-check after lock acquired
+        if [ -f "$DEST" ] && [ -s "$DEST" ]; then
+            echo "$DEST  (cache hit after lock)" >&2
+            exit 0
+        fi
+        # ffmpeg picks the muxer from the EXTENSION; .tmp.$$ MUST go BEFORE
+        # .mp4 so the filename still ends in .mp4 and ffmpeg writes ISO-BMFF.
+        # (otherwise: "Unable to choose an output format for ...tmp.NNN".)
+        TMP="${DEST%.mp4}.tmp.$$.mp4"
+        # -map 0:v? — copy video stream if present (None for audio-only sources is fine)
+        # -map 0:a:0 — first audio stream
+        # -c:v copy — never recompress video
+        # -c:a flac -compression_level 0 — fast lossless FLAC (Resolve decodes natively)
+        # FLAC-in-mp4 is supported per ISO/IEC 14496-12 Annex E.2 (codingname 'fLaC').
+        # 300s timeout — protects against malformed/malicious AAC that hangs
+        # the decoder. 300s comfortably covers a 4-hour podcast on modern CPUs
+        # at libavcodec AAC decode speed (~20-50× realtime).
+        if timeout 300 ffmpeg -y -hide_banner -loglevel error \
+                  -i "$SRC" \
+                  -map 0:v? -c:v copy \
+                  -map 0:a:0 -c:a flac -compression_level 0 \
+                  -movflags +faststart \
+                  "$TMP" </dev/null; then
+            mv -f "$TMP" "$DEST"
+            echo "$DEST" >&2
+        else
+            rm -f -- "$TMP"
+            echo "ffmpeg transcode failed for $SRC" >&2
+            exit 1
+        fi
+        # Self-prune cache to AAC_CACHE_CAP_GB (default 50 GB) by oldest atime.
+        # Backgrounded + errors swallowed so import path is never affected.
+        (
+            set +e
+            cap_gb="${AAC_CACHE_CAP_GB:-50}"
+            cap_bytes=$((cap_gb * 1073741824))
+            total=$(du -sb "$CACHE_DIR" 2>/dev/null | cut -f1)
+            if [ -n "$total" ] && [ "$total" -gt "$cap_bytes" ]; then
+                find "$CACHE_DIR" -type f -name '*.resolve.mp4' -printf '%A@\t%s\t%p\n' 2>/dev/null \
+                  | sort -n \
+                  | while IFS=$'\t' read -r _ sz f; do
+                        [ "$total" -le "$cap_bytes" ] && break
+                        rm -f -- "$f" 2>/dev/null && total=$((total - sz))
+                    done
+            fi
+        ) >/dev/null 2>&1 &
+        disown 2>/dev/null || true
+        ;;
+    *)
+        echo "unknown command: $CMD" >&2
+        exit 2
+        ;;
+esac
