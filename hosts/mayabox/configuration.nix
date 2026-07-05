@@ -10,6 +10,7 @@
     ../../configuration.nix
     ./hardware-configuration.nix
     ./nvidia.nix
+    ./gpu-passthrough.nix
 
     ./home.nix
     ../../apps/keyboard-knob-remap.nix
@@ -33,6 +34,12 @@
 
       efi.canTouchEfiVariables = true;
     };
+
+    kernelParams = [
+      "amd_iommu=on"
+      "iommu=pt"
+      "pcie_acs_override=downstream,multifunction"
+    ];
   };
 
   # stolen :3
@@ -52,9 +59,12 @@
   };
 
   virtualisation = {
-    libvirtd.enable = true;
-    spiceUSBRedirection.enable = true;
     docker.enable = true;
+    libvirtd = {
+      enable = true;
+      onBoot = "ignore";
+      onShutdown = "shutdown";
+    };
   };
 
   environment = {
