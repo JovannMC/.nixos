@@ -425,10 +425,10 @@
     #logmein-hamachi.enable = true;
     flatpak.enable = true;
 
-    usbmuxd = {
-      enable = true;
-      package = pkgs.usbmuxd2;
-    };
+    # usbmuxd = {
+    #   enable = true;
+    #   package = pkgs.usbmuxd2;
+    # };
 
     cloudflare-warp = {
       enable = true;

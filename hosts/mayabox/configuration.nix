@@ -11,6 +11,7 @@
     ./hardware-configuration.nix
     ./nvidia.nix
     ./gpu-passthrough.nix
+    ./qemu-anti-detection.nix
 
     ./home.nix
     ../../apps/keyboard-knob-remap.nix
