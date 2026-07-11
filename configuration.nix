@@ -51,8 +51,8 @@
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
     networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
     nameservers = [
-      "1.1.1.1#one.one.one.one"
-      "1.0.0.1#one.one.one.one"
+      "192.168.1.69" # AdGuard Home
+      "1.1.1.1"
     ];
   };
 
@@ -161,6 +161,7 @@
       inputs.nix-alien.packages.${system}.default
       autojump
       tmux
+      dig
 
       # chat
       vesktop
@@ -390,16 +391,18 @@
     };
 
     resolved = {
-      enable = true;
-      settings.Resolve = {
-        DNSSEC = "true";
-        Domains = [ "~." ];
-        FallbackDNS = [
-          "1.1.1.1#one.one.one.one"
-          "1.0.0.1#one.one.one.one"
-        ];
-        DNSOverTLS = "true";
-      };
+      enable = false;
+      # settings.Resolve = {
+      #   Domains = [ "~." ];
+      #   DNSSEC = "true";
+      #   DNSOverTLS = "true";
+      #   DNS = "192.168.1.69";
+      #   FallbackDNS = [
+      #     "1.1.1.1#one.one.one.one"
+      #     "1.0.0.1#one.one.one.one"
+      #   ];
+      #   DNSStubListener = "no";
+      # };
     };
     openssh.enable = true;
     blueman.enable = true;
