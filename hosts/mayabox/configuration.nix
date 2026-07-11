@@ -15,6 +15,7 @@
 
     ./home.nix
     ../../apps/keyboard-knob-remap.nix
+    ../../apps/sunshine.nix
   ];
 
   networking.hostName = "mayabox";
