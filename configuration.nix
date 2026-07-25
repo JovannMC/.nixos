@@ -106,6 +106,41 @@
     ];
   };
 
+  # smb shares
+  fileSystems =
+    let
+      smbOptions = [
+        "credentials=/home/jovannmc/.smbcredentials"
+        "uid=1000"
+        "gid=100"
+        "iocharset=utf8"
+        "file_mode=0644"
+        "dir_mode=0755"
+        "actimeo=30"
+        "soft"
+        "nofail"
+        "_netdev"
+        "x-systemd.automount"
+        "noauto"
+        "x-systemd.after=network-online.target"
+        "x-systemd.idle-timeout=300"
+        "x-systemd.device-timeout=5s"
+        "x-systemd.mount-timeout=5s"
+      ];
+    in
+    {
+      "/mnt/maya" = {
+        device = "//192.168.1.69/maya";
+        fsType = "cifs";
+        options = smbOptions;
+      };
+      "/mnt/public" = {
+        device = "//192.168.1.69/public";
+        fsType = "cifs";
+        options = smbOptions;
+      };
+    };
+
   environment = {
     variables = {
       GAY = "maya";
@@ -182,10 +217,11 @@
       spotify
       nixd
       firefoxpwa
+      cifs-utils
 
       # utilities
       gparted
-      recoll
+      fsearch
       pinta
       qdirstat
       kdePackages.kalk
