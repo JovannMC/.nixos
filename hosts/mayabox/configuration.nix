@@ -16,6 +16,8 @@
     ./home.nix
     ../../apps/keyboard-knob-remap.nix
     ../../apps/sunshine.nix
+    ../../apps/fah.nix
+    ../../apps/fah-idle.nix
   ];
 
   networking.hostName = "mayabox";
@@ -66,6 +68,7 @@
       enable = true;
       onBoot = "ignore";
       onShutdown = "shutdown";
+      qemu.swtpm.enable = true;
     };
   };
 
@@ -125,10 +128,11 @@
       inputs.orion-browser.packages.${pkgs.system}.default
       (pkgs.callPackage ../../apps/davinci-resolve-paid.nix { })
       fahclient
+      swtpm
 
       # utilities
       # gwe # no support for wayland
-      # tuxclocker # broken - see https://github.com/NixOS/nixpkgs/issues/504637 & https://github.com/Lurkki14/tuxclocker/pull/107
+      #tuxclocker # broken - see https://github.com/NixOS/nixpkgs/issues/504637 & https://github.com/Lurkki14/tuxclocker/pull/107
       nvidia-vaapi-driver
       #pkgs.audiorelay
       sonobus
@@ -244,12 +248,6 @@
       #   };
       # });
     };
-
-    # foldingathome = {
-    #   enable = true;
-    #   team = 1066441;
-    #   user = "JovannMC";
-    # };
 
     flatpak = {
       packages = [

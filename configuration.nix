@@ -153,6 +153,15 @@
       ADB_LIBUSB = "0"; # adb broken - see https://github.com/nmeum/android-tools/issues/153
     };
 
+    interactiveShellInit = ''
+      unset SSH_AGENT_PID
+      if [ "''${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+        export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+      fi
+      export GPG_TTY=$(tty)
+      gpg-connect-agent updatestartuptty /bye >/dev/null
+    '';
+
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = with pkgs; [
@@ -197,6 +206,7 @@
       autojump
       tmux
       dig
+      micro
 
       # chat
       vesktop
@@ -243,6 +253,7 @@
       tigervnc
       discord-canary
       peazip
+      kdePackages.kleopatra
     ];
   };
 
@@ -289,6 +300,8 @@
         upgrade-flake = "nix flake update && sudo nixos-rebuild switch";
         upgrade-nixpkgs = "nix flake update nixpkgs && sudo nixos-rebuild switch --flake .#mayabox";
         upgrade-kernel = "nix flake update nix-cachyos-kernel && sudo nixos-rebuild switch --flake .#mayabox";
+        nano = "micro";
+        nixos-rebuild = "nh os";
       };
 
       ohMyZsh = {
