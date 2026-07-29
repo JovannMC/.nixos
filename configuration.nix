@@ -322,11 +322,9 @@
       lfs.enable = true;
       config = {
         user.name = "JovannMC";
-        user.email = "jovannmc@femboyfurry.net";
+        user.email = "hello@jovann.me";
         commit.gpgsign = true;
         tag.gpgsign = true;
-        gpg.format = "ssh";
-        user.signingkey = "/home/jovannmc/.ssh/id_rsa.pub";
       };
     };
 
