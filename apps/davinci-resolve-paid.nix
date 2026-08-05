@@ -1,34 +1,41 @@
 {
-  davinci-resolve-studio,
   hexdump,
   replaceDependencies,
   makeWrapper,
+  system,
   pkgs,
   ...
 }:
 let
+  oldNixpkgs =
+    import
+      (fetchTarball {
+        url = "https://github.com/NixOS/nixpkgs/archive/dafd5c9a23c5e68f01bd021c1bf4d8eaa8462718.tar.gz";
+        sha256 = "0pajvfdn3l8yan3z6p7l10wcrxmzlkiqnsi9mrz6g1sdzdnz559r";
+      })
+      {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
+
   ffmpeg-encoder-plugin = pkgs.stdenv.mkDerivation (finalAttrs: {
     pname = "ffmpeg-encoder-plugin";
     version = "1.3.3";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "EdvinNilsson";
-      repo = "ffmpeg_encoder_plugin";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-G677EnV9cob0VyLzuyMeKzrDLZB7NrzmBVBRQ2kN/Gc=";
+    src = pkgs.fetchzip {
+      url = "https://github.com/EdvinNilsson/ffmpeg_encoder_plugin/releases/download/v${finalAttrs.version}/ffmpeg_encoder_plugin.dvcp.bundle.zip";
+      hash = "sha256-NAXyGbSdN3fyF0t8EeBPhRg+y3JEDP0WJ0v2WgPFdlU=";
     };
 
-    nativeBuildInputs = with pkgs; [
-      cmake
-      ffmpeg-full
-    ];
-
-    buildInputs = with pkgs; [ ffmpeg ];
+    dontConfigure = true;
+    dontBuild = true;
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out
-      cp ffmpeg_encoder_plugin.dvcp $out/
+      cp Contents/Linux-x86-64/ffmpeg_encoder_plugin.dvcp $out/
       runHook postInstall
     '';
   });
@@ -64,7 +71,8 @@ let
     '';
   };
 
-  nonFhsOriginalDavinci = davinci-resolve-studio.passthru.davinci;
+  oldDavinciResolveStudio = oldNixpkgs.davinci-resolve-studio;
+  nonFhsOriginalDavinci = oldDavinciResolveStudio.passthru.davinci;
 
   davinciPatched = nonFhsOriginalDavinci.overrideAttrs (
     finalAttrs: prevAttrs: {
@@ -120,7 +128,7 @@ let
   );
 in
 replaceDependencies {
-  drv = davinci-resolve-studio;
+  drv = oldDavinciResolveStudio;
   replacements = [
     {
       oldDependency = nonFhsOriginalDavinci;

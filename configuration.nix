@@ -207,6 +207,7 @@
       tmux
       dig
       micro
+      jq
 
       # chat
       vesktop
@@ -295,11 +296,11 @@
 
       shellAliases = {
         ll = "ls -l";
-        update = "sudo nixos-rebuild switch";
-        update-flake = "sudo nixos-rebuild switch";
-        upgrade-flake = "nix flake update && sudo nixos-rebuild switch";
-        upgrade-nixpkgs = "nix flake update nixpkgs && sudo nixos-rebuild switch --flake .#mayabox";
-        upgrade-kernel = "nix flake update nix-cachyos-kernel && sudo nixos-rebuild switch --flake .#mayabox";
+        update = "nh os switch";
+        update-flake = "nh os switch";
+        upgrade-flake = "nix flake update && nh os switch";
+        upgrade-nixpkgs = "nix flake update nixpkgs && nh os switch";
+        upgrade-kernel = "nix flake update nix-cachyos-kernel && nh os switch";
         nano = "micro";
         nixos-rebuild = "nh os";
       };
@@ -467,7 +468,7 @@
 
     mullvad-vpn = {
       enable = true;
-      package = pkgs.mullvad-vpn;
+      gui.enable = true;
     };
 
     tailscale.enable = true;

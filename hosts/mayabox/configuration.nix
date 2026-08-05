@@ -10,6 +10,7 @@
     ../../configuration.nix
     ./hardware-configuration.nix
     ./nvidia.nix
+
     ./gpu-passthrough.nix
     ./qemu-anti-detection.nix
 
@@ -185,7 +186,6 @@
       #       passthru = removeAttrs previousAttrs.passthru [ "updateScript" ];
       #     })
       # )
-      discord-canary
     ];
   };
 
