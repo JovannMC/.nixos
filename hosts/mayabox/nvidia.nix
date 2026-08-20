@@ -58,5 +58,27 @@ in
         #package = config.boot.kernelPackages.nvidiaPackages.beta;
       };
     };
+
+    # set 1660 super to 100W and 3060 ti to 160W
+    systemd.services.nvidia-power-limit = {
+      description = "Set NVIDIA GPU power limits";
+      after = [ "nvidia-persistenced.service" ];
+      wants = [ "nvidia-persistenced.service" ];
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      script = ''
+        nvidia-smi -i 0 -pl 100
+        nvidia-smi -i 1 -pl 160
+      '';
+
+      path = [
+        config.hardware.nvidia.package
+      ];
+    };
   };
 }
