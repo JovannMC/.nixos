@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   inputs,
   ...
@@ -33,7 +32,7 @@
           enable = true;
           splash = "100% Orange Juice!";
           background = "background_options/1.8  - [Classic Minecraft].png";
-          boot-options-count = 2;
+          boot-options-count = 3;
         };
       };
 
@@ -51,6 +50,7 @@
   # https://github.com/AnnoyingRain5/dotfiles/blob/f7ca4e42ee12234ddf40ef91755c58a2ea4dca13/hosts/Dragon/configuration.nix#L50
   specialisation = {
     nvk.configuration = {
+      mayabox.nvidia.enable = false;
       services.xserver.videoDrivers = [
         "nouveau"
         "modesetting"
@@ -60,6 +60,11 @@
         "nouveau.config=NvGspRm=1"
         "module_blacklist=nvidia"
       ];
+    };
+
+    # nvidia + vfio pcie for 1660 super passthru
+    nvidia-vfio.configuration = {
+      mayabox.vfio.enable = true;
     };
   };
 
@@ -154,6 +159,7 @@
             --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ tesseract ]} \
         '';
       })
+      passt
 
       # currently broken, discord_krisp moved?
       # -- FileNotFoundError: [Errno 2] No such file or directory: '/home/jovannmc/.config/discordcanary/0.0.871/modules/discord_krisp/discord_krisp.node'

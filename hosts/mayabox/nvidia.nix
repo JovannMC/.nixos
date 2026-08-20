@@ -12,7 +12,13 @@ let
 in
 {
   ### only enable hardware.nvidia on the default specialisation, to allow the nouveau specialisation to exist ###
-  config = lib.mkIf (config.specialisation != { }) {
+  options.mayabox.nvidia.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Enable nvidia proprietary drivers guh";
+  };
+
+  config = lib.mkIf config.mayabox.nvidia.enable {
     # Load nvidia driver for Xorg and Wayland
     services.xserver = {
       videoDrivers = [ "nvidia" ];
