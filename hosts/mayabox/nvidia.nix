@@ -72,8 +72,9 @@ in
       };
 
       script = ''
-        nvidia-smi -i 0 -pl 100
-        nvidia-smi -i 1 -pl 160
+        # nvidia-smi -i 0 -pl 100
+        # nvidia-smi -i 1 -pl 160
+        nvidia-smi -pl 160
       '';
 
       path = [

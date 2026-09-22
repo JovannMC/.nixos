@@ -10,9 +10,6 @@
     ./hardware-configuration.nix
     ./nvidia.nix
 
-    ./gpu-passthrough.nix
-    ./qemu-anti-detection.nix
-
     ./home.nix
     ../../apps/keyboard-knob-remap.nix
     ../../apps/sunshine.nix
@@ -61,11 +58,6 @@
         "module_blacklist=nvidia"
       ];
     };
-
-    # nvidia + vfio pcie for 1660 super passthru
-    nvidia-vfio.configuration = {
-      mayabox.vfio.enable = true;
-    };
   };
 
   virtualisation = {
@@ -74,7 +66,6 @@
       enable = true;
       onBoot = "ignore";
       onShutdown = "shutdown";
-      qemu.swtpm.enable = true;
     };
   };
 
@@ -134,7 +125,6 @@
       inputs.orion-browser.packages.${pkgs.system}.default
       (pkgs.callPackage ../../apps/davinci-resolve-paid.nix { })
       fahclient
-      swtpm
 
       # utilities
       # gwe # no support for wayland
@@ -258,6 +248,8 @@
     flatpak = {
       packages = [
         "org.vinegarhq.Sober"
+        "com.dec05eba.gpu_screen_recorder"
+        "com.github.tchx84.Flatseal"
       ];
     };
 

@@ -103,6 +103,7 @@
     permittedInsecurePackages = [
       "olm-3.2.16"
       "openssl-1.1.1w"
+      "ladybird-0-unstable-2026-06-05"
     ];
   };
 
@@ -318,7 +319,7 @@
       shellAliases = {
         ll = "ls -l";
         update = "nh os switch";
-        update-flake = "nh os switch";
+        update-flake = "nix flake update";
         upgrade-flake = "nix flake update && nh os switch";
         upgrade-nixpkgs = "nix flake update nixpkgs && nh os switch";
         upgrade-kernel = "nix flake update nix-cachyos-kernel && nh os switch";
@@ -409,7 +410,7 @@
         wlrobs
         obs-backgroundremoval
         obs-pipewire-audio-capture
-        obs-dvd-screensaver
+        #obs-dvd-screensaver
         obs-freeze-filter
         obs-multi-rtmp
         obs-media-controls
@@ -509,6 +510,57 @@
   };
 
   systemd.packages = with pkgs; [ arrpc ];
+  systemd.services.tailscale-mullvad-exclude = {
+    description = "Exclude Tailscale traffic from Mullvad";
 
-  networking.firewall.enable = false;
+    after = [
+      "mullvad-daemon.service"
+      "tailscaled.service"
+    ];
+
+    wants = [
+      "mullvad-daemon.service"
+      "tailscaled.service"
+    ];
+
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+
+    script = ''
+      ${pkgs.nftables}/bin/nft -f - <<'EOF'
+      table inet tailscale {
+        chain input {
+          type filter hook input priority -100;
+          policy accept;
+
+          ip saddr 100.64.0.0/10 \
+            ct mark set 0x00000f41 \
+            meta mark set 0x6d6f6c65;
+        }
+
+        chain output {
+          type route hook output priority -100;
+          policy accept;
+
+          ip daddr 100.64.0.0/10 \
+            ct mark set 0x00000f41 \
+            meta mark set 0x6d6f6c65;
+        }
+      }
+      EOF
+    '';
+  };
+
+  networking = {
+    firewall = {
+      enable = false;
+    };
+    nftables = {
+      enable = true;
+    };
+  };
 }

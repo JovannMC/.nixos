@@ -22,7 +22,7 @@ let
 
   ffmpeg-encoder-plugin = pkgs.stdenv.mkDerivation (finalAttrs: {
     pname = "ffmpeg-encoder-plugin";
-    version = "1.3.3";
+    version = "1.4.0";
 
     src = pkgs.fetchzip {
       url = "https://github.com/EdvinNilsson/ffmpeg_encoder_plugin/releases/download/v${finalAttrs.version}/ffmpeg_encoder_plugin.dvcp.bundle.zip";
