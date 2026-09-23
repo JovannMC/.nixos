@@ -219,6 +219,7 @@
       telegram-desktop
       signal-desktop
       element-desktop
+      (callPackage ./apps/sable-client.nix { })
 
       # networking
       qbittorrent

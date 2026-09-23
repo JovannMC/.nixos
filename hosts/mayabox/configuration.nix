@@ -194,6 +194,7 @@
       extraCompatPackages = with pkgs; [
         proton-ge-bin
         proton-ge-rtsp-bin
+        proton-rtsp-bin
         pkgs.steam-play-none
       ];
     };
