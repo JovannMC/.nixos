@@ -43,7 +43,11 @@
       plymouth-minecraft-theme.enable = true;
     };
   };
-  security.polkit.enable = true;
+
+  security = {
+    polkit.enable = true;
+    rtkit.enable = true;
+  };
 
   networking = {
     # Pick only one of the below networking options.
@@ -212,6 +216,7 @@
       ripgrep
       file
       parallel
+      zsh-autocomplete
 
       # chat
       vesktop
