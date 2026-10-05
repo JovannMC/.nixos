@@ -266,6 +266,8 @@
         };
       };
     };
+
+    tailscale.port = 41642;
   };
 
   fileSystems = {
