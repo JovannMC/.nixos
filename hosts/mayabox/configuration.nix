@@ -219,7 +219,19 @@
       ];
     };
 
-    pipewire.alsa.support32Bit = true;
+    pipewire = {
+      alsa.support32Bit = true;
+      extraConfig.pipewire."99-sample-rate" = {
+        "context.properties" = {
+          "default.clock.rate" = 44100;
+          "default.clock.allowed-rates" = [ 44100 ];
+          # "default.clock.rate" = 48000;
+          # "default.clock.quantum" = 1024;
+          # "default.clock.min-quantum" = 1024;
+          # "default.clock.max-quantum" = 2048;
+        };
+      };
+    };
 
     #
     # user stuff

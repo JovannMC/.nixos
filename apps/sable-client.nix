@@ -70,13 +70,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "sable-desktop";
-  version = "1.22.6";
+  version = "1.22.11";
 
   src = fetchFromGitHub {
     owner = "SableClient";
     repo = "Sable";
-    tag = "v1.22.6";
-    hash = "sha256-AZ2gKcCLJvllC/lOL+l/zt3/RxztWd8mu25Eo0vyMBY=";
+    tag = "v1.22.11";
+    hash = "sha256-RwYKaJ4k2lqXjVSPN/o0Qw8GIGnXfb6acCpva36qQoM=";
   };
 
   # patch to use version-identical binary packages, delete at version 1.21.1
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-lniZWKLsKBmufZ2KVGH8yzUu4FedCP21RW+yiEAJan0=";
+  cargoHash = "sha256-i+Hi9ToIU4TXm8DJXotAvj2LuF/oamiYwMtLh7ANU5w=";
   cargoDepsName = finalAttrs.pname;
 
   tauriBuildFlags = "--no-sign";

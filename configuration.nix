@@ -217,6 +217,8 @@
       file
       parallel
       zsh-autocomplete
+      bubblewrap
+      socat
 
       # chat
       vesktop
