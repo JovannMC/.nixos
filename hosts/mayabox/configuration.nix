@@ -70,6 +70,12 @@
   };
 
   environment = {
+    sessionVariables = {
+      # grabbed these from https://github.com/psygreg/shader-booster/
+      __GL_SHADER_DISK_CACHE_SIZE = "10000000000"; # 10GB
+      MESA_SHADER_CACHE_MAX_SIZE = "10G";
+    };
+
     etc."libinput/local-overrides.quirks" = {
       # please work
       text = ''
