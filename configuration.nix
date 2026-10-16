@@ -178,7 +178,6 @@
       gnumake
       gcc
       undollar
-      rust-analyzer
       jetbrains-toolbox
       jdk17
 
